@@ -57,7 +57,8 @@ Provision the complete Supabase infrastructure: PostgreSQL tables for all 8 coll
 
 - The planner should generate the full SQL for all 8 tables as executable statements (not pseudo-code) — ready to paste into the Supabase SQL editor
 - The planner should generate complete RLS policy SQL for each table, covering anon read, authenticated write, and tenant isolation
-- The JWT custom claims hook should embed `tenant_id` (UUID of the merchant's tenant row, null for buyers) and `app_role` (`merchant` or `buyer` or `admin`)
+- The JWT custom claims hook embeds `tenant_id` (UUID of the merchant's tenant row, null for buyers with no shop) and `app_role` (`'user'` for regular users/buyers, `'super-admin'` for platform admins)
+- Merchants are identified by `tenant_id` presence in the JWT — not a separate `'merchant'` role value. If `tenant_id` is non-null, the user is a merchant.
 
 </specifics>
 

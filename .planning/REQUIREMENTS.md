@@ -96,19 +96,52 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FOUN-01–06 | Phase 1 | Pending |
-| AUTH-01–06 | Phase 2 | Pending |
-| DATA-01–05 | Phase 3 | Pending |
-| API-01–07 | Phase 4 | Pending |
-| STOR-01–05 | Phase 5 | Pending |
-| ADMN-01–06 | Phase 6 | Pending |
-| CLEN-01–05 | Phase 7 | Pending |
+| FOUN-01 | Phase 1 — Foundation | Pending |
+| FOUN-02 | Phase 1 — Foundation | Pending |
+| FOUN-03 | Phase 1 — Foundation | Pending |
+| FOUN-04 | Phase 1 — Foundation | Pending |
+| FOUN-05 | Phase 1 — Foundation | Pending |
+| FOUN-06 | Phase 1 — Foundation | Pending |
+| AUTH-01 | Phase 2 — Auth Migration | Pending |
+| AUTH-02 | Phase 2 — Auth Migration | Pending |
+| AUTH-03 | Phase 2 — Auth Migration | Pending |
+| AUTH-04 | Phase 2 — Auth Migration | Pending |
+| AUTH-05 | Phase 2 — Auth Migration | Pending |
+| AUTH-06 | Phase 2 — Auth Migration | Pending |
+| DATA-01 | Phase 3 — Data Migration | Pending |
+| DATA-02 | Phase 3 — Data Migration | Pending |
+| DATA-03 | Phase 3 — Data Migration | Pending |
+| DATA-04 | Phase 3 — Data Migration | Pending |
+| DATA-05 | Phase 3 — Data Migration | Pending |
+| API-01 | Phase 4 — API Layer Migration | Pending |
+| API-02 | Phase 4 — API Layer Migration | Pending |
+| API-03 | Phase 4 — API Layer Migration | Pending |
+| API-04 | Phase 4 — API Layer Migration | Pending |
+| API-05 | Phase 4 — API Layer Migration | Pending |
+| API-06 | Phase 4 — API Layer Migration | Pending |
+| API-07 | Phase 4 — API Layer Migration | Pending |
+| STOR-01 | Phase 5 — Storage Migration | Pending |
+| STOR-02 | Phase 5 — Storage Migration | Pending |
+| STOR-03 | Phase 5 — Storage Migration | Pending |
+| STOR-04 | Phase 5 — Storage Migration | Pending |
+| STOR-05 | Phase 5 — Storage Migration | Pending |
+| ADMN-01 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-02 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-03 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-04 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-05 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-06 | Phase 6 — Custom Admin UI | Pending |
+| CLEN-01 | Phase 7 — Payload Removal + Cutover | Pending |
+| CLEN-02 | Phase 7 — Payload Removal + Cutover | Pending |
+| CLEN-03 | Phase 7 — Payload Removal + Cutover | Pending |
+| CLEN-04 | Phase 7 — Payload Removal + Cutover | Pending |
+| CLEN-05 | Phase 7 — Payload Removal + Cutover | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
 - Mapped to phases: 36
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after initial definition*
+*Last updated: 2026-02-24 — traceability updated after roadmap creation*

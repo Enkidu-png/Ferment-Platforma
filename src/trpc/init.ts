@@ -1,53 +1,29 @@
 import { initTRPC, TRPCError } from '@trpc/server';
-import { getPayload } from 'payload';
-import config from "@payload-config";
-import superjson from "superjson";
-import { headers as getHeaders } from 'next/headers';
-
 import { cache } from 'react';
+import superjson from 'superjson';
+
+import { createClient } from '@/lib/supabase/server';
+
 export const createTRPCContext = cache(async () => {
-  /**
-   * @see: https://trpc.io/docs/server/context
-   */
-  return { userId: 'user_123' };
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  return { supabase, user };
 });
-// Avoid exporting the entire t-object
-// since it's not very descriptive.
-// For instance, the use of a t variable
-// is common in i18n libraries.
-const t = initTRPC.create({
-  /**
-   * @see https://trpc.io/docs/server/data-transformers
-   */
+
+const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
 });
-// Base router and procedure helpers
+
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
-export const baseProcedure = t.procedure.use(async ({ next }) => {
-  const payload = await getPayload({ config });
+export const baseProcedure = t.procedure;
 
-  return next({ ctx: { db: payload } });
-});
-
-export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
-  const headers = await getHeaders();
-  const session = await ctx.db.auth({ headers });
-
-  if (!session.user) {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.user) {
     throw new TRPCError({
-      code: "UNAUTHORIZED",
-      message: "Not authenticated",
+      code: 'UNAUTHORIZED',
+      message: 'Not authenticated',
     });
   }
-
-  return next({
-    ctx: {
-      ...ctx,
-      session: {
-        ...session,
-        user: session.user,
-      },
-    },
-  });
+  return next({ ctx: { ...ctx, user: ctx.user } });
 });

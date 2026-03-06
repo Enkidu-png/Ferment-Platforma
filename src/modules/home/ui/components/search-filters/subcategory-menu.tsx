@@ -1,8 +1,10 @@
 import Link from "next/link";
 
-import { Category } from "@/payload-types";
+import type { Tables } from "@/lib/supabase/types";
 
 import { CategoriesGetManyOutput } from "@/modules/categories/types";
+
+type Category = Tables<"categories">;
 
 interface Props {
   category: CategoriesGetManyOutput[1]

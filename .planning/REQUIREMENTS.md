@@ -34,7 +34,7 @@
 ### API Layer
 
 - [x] **API-01**: Products tRPC router rewritten to use Supabase client
-- [ ] **API-02**: Auth tRPC router rewritten to use Supabase Auth
+- [x] **API-02**: Auth tRPC router rewritten to use Supabase Auth
 - [x] **API-03**: Tenants tRPC router rewritten to use Supabase client
 - [x] **API-04**: Orders tRPC router rewritten to use Supabase client
 - [x] **API-05**: Checkout tRPC router and Stripe webhook handler updated for UUID format
@@ -114,7 +114,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 3 — Data Migration | Pending |
 | DATA-05 | Phase 3 — Data Migration | Pending |
 | API-01 | Phase 4 — API Layer Migration | Complete |
-| API-02 | Phase 4 — API Layer Migration | Pending |
+| API-02 | Phase 4 — API Layer Migration | Complete |
 | API-03 | Phase 4 — API Layer Migration | Complete |
 | API-04 | Phase 4 — API Layer Migration | Complete |
 | API-05 | Phase 4 — API Layer Migration | Complete |

@@ -264,7 +264,7 @@ async function seedProducts(
 ): Promise<void> {
   console.log('\n[Products]')
 
-  const [ana, jan, mia] = artists
+  const [ana, jan, mia] = artists as [typeof artists[0], typeof artists[0], typeof artists[0]]
 
   async function getOrCreateProduct(
     tenantId: string,

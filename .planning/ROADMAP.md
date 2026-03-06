@@ -50,7 +50,7 @@ Plans:
   5. `ctx.supabase` is available in tRPC procedures and `protectedProcedure` rejects unauthenticated requests with a 401
 **Plans**: 3 plans
 Plans:
-- [ ] 02-01-PLAN.md — tRPC context rewrite (ctx.supabase + protectedProcedure) + auth procedures simplification + schemas update
+- [x] 02-01-PLAN.md — tRPC context rewrite (ctx.supabase + protectedProcedure) + auth procedures simplification + schemas update
 - [ ] 02-02-PLAN.md — Middleware composition (Supabase session refresh + subdomain routing) + subdomain cookie config
 - [ ] 02-03-PLAN.md — Sign-in/sign-up views rewire + /auth/confirm route + /pending page
 
@@ -118,7 +118,7 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-06 |
-| 2. Auth Migration | 0/3 | Planned | - |
+| 2. Auth Migration | 1/3 | In progress | - |
 | 3. Data Migration | 0/TBD | Not started | - |
 | 4. API Layer Migration | 0/TBD | Not started | - |
 | 5. Storage Migration | 0/TBD | Not started | - |

@@ -35,11 +35,11 @@
 
 - [ ] **API-01**: Products tRPC router rewritten to use Supabase client
 - [ ] **API-02**: Auth tRPC router rewritten to use Supabase Auth
-- [ ] **API-03**: Tenants tRPC router rewritten to use Supabase client
+- [x] **API-03**: Tenants tRPC router rewritten to use Supabase client
 - [ ] **API-04**: Orders tRPC router rewritten to use Supabase client
 - [ ] **API-05**: Checkout tRPC router and Stripe webhook handler updated for UUID format
-- [ ] **API-06**: Categories and Tags tRPC routers rewritten to use Supabase client
-- [ ] **API-07**: All user-facing procedures use anon client (RLS enforced); Stripe webhook uses service-role client (RLS bypassed)
+- [x] **API-06**: Categories and Tags tRPC routers rewritten to use Supabase client
+- [x] **API-07**: All user-facing procedures use anon client (RLS enforced); Stripe webhook uses service-role client (RLS bypassed)
 
 ### Storage
 
@@ -115,11 +115,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-05 | Phase 3 — Data Migration | Pending |
 | API-01 | Phase 4 — API Layer Migration | Pending |
 | API-02 | Phase 4 — API Layer Migration | Pending |
-| API-03 | Phase 4 — API Layer Migration | Pending |
+| API-03 | Phase 4 — API Layer Migration | Complete |
 | API-04 | Phase 4 — API Layer Migration | Pending |
 | API-05 | Phase 4 — API Layer Migration | Pending |
-| API-06 | Phase 4 — API Layer Migration | Pending |
-| API-07 | Phase 4 — API Layer Migration | Pending |
+| API-06 | Phase 4 — API Layer Migration | Complete |
+| API-07 | Phase 4 — API Layer Migration | Complete |
 | STOR-01 | Phase 5 — Storage Migration | Pending |
 | STOR-02 | Phase 5 — Storage Migration | Pending |
 | STOR-03 | Phase 5 — Storage Migration | Pending |

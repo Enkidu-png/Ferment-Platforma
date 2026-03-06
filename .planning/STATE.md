@@ -1,3 +1,19 @@
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: completed
+stopped_at: Completed 04-01-PLAN.md (categories/tags/tenants routers migrated)
+last_updated: "2026-03-06T16:06:26.990Z"
+last_activity: "2026-03-06 — Phase 4 planned (5 plans: categories/tags/tenants, products, reviews/library, checkout/webhook, Payload removal)"
+progress:
+  total_phases: 7
+  completed_phases: 3
+  total_plans: 13
+  completed_plans: 9
+  percent: 69
+---
+
 # Project State
 
 ## Project Reference
@@ -9,19 +25,19 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 ## Current Position
 
-Phase: 4 of 7 (API Layer Migration) — PLANNED, READY TO EXECUTE
-Plan: 0 of 5 — pending
-Status: Phase 4 planned — 5 plans, 4 waves; Phase 3 complete
-Last activity: 2026-03-06 — Phase 4 planned (5 plans: categories/tags/tenants, products, reviews/library, checkout/webhook, Payload removal)
+Phase: 4 of 7 (API Layer Migration) — IN PROGRESS
+Plan: 1 of 5 — complete
+Status: Plan 04-01 complete — categories, tags, tenants routers migrated to Supabase
+Last activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
 
-Progress: [████████░░] 43%
+Progress: [███████░░░] 69%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
+- Total plans completed: 6
 - Average duration: ~7 min
-- Total execution time: ~0.58 hours
+- Total execution time: ~0.67 hours
 
 **By Phase:**
 
@@ -29,9 +45,10 @@ Progress: [████████░░] 43%
 |-------|-------|-------|----------|
 | 02 Auth Migration | 3 | ~14 min | ~5 min |
 | 03 Seed + Verify | 2 | ~21 min | ~10 min |
+| 04 API Migration | 1/5 done | 8 min | 8 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (2.5 min), 02-02 (3 min), 02-03 (8 min), 03-01 (5 min), 03-02 (16 min)
+- Last 6 plans: 02-01 (2.5 min), 02-02 (3 min), 02-03 (8 min), 03-01 (5 min), 03-02 (16 min), 04-01 (8 min)
 - Trend: Consistent
 
 *Updated after each plan completion*
@@ -57,6 +74,8 @@ Recent decisions affecting current work:
 - 03-01: stripe_account_id uses 'placeholder_{slug}' per tenant (not empty string — empty string conflicts on re-runs)
 - 03-02: Playwright uses locator('input').first() not getByLabel — shadcn FormLabel unreliable with Playwright's label association detection
 - 03-02: custom_access_token_hook had null-safety bug — fixed with coalesce(event->'claims', '{}'::jsonb); migration applied
+- [Phase 04]: Cast PostgREST self-join result via unknown — Supabase infers join as T|null not T[], requiring explicit unknown cast
+- [Phase 04]: tagsRouter return shape uses hasNextPage/page — Payload nextPage field removed; consumer tags-filter.tsx updated
 
 ### Pending Todos
 
@@ -69,6 +88,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06
-Stopped at: Phase 4 planned — 5 plans verified and ready. Next: /gsd:execute-phase 4
+Last session: 2026-03-06T16:06:26.986Z
+Stopped at: Completed 04-01-PLAN.md (categories/tags/tenants routers migrated)
 Resume file: None

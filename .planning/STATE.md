@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
+stopped_at: Completed 04-03-PLAN.md (reviews/library routers migrated to Supabase)
+last_updated: "2026-03-06T16:12:43.769Z"
+last_activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
+progress:
+  total_phases: 7
+  completed_phases: 3
+  total_plans: 13
+  completed_plans: 10
+  percent: 77
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: completed
 stopped_at: Completed 04-01-PLAN.md (categories/tags/tenants routers migrated)
 last_updated: "2026-03-06T16:06:26.990Z"
 last_activity: "2026-03-06 — Phase 4 planned (5 plans: categories/tags/tenants, products, reviews/library, checkout/webhook, Payload removal)"
 progress:
-  total_phases: 7
+  [████████░░] 77%
   completed_phases: 3
   total_plans: 13
   completed_plans: 9
@@ -76,6 +92,9 @@ Recent decisions affecting current work:
 - 03-02: custom_access_token_hook had null-safety bug — fixed with coalesce(event->'claims', '{}'::jsonb); migration applied
 - [Phase 04]: Cast PostgREST self-join result via unknown — Supabase infers join as T|null not T[], requiring explicit unknown cast
 - [Phase 04]: tagsRouter return shape uses hasNextPage/page — Payload nextPage field removed; consumer tags-filter.tsx updated
+- [Phase 04]: reviews ownership check uses existingReview.user_id !== ctx.user.id (Supabase field name, not user)
+- [Phase 04]: library.getMany uses two-step orders→products query pattern (PostgREST has no populate; two fetches required)
+- [Phase 04]: RichText (Payload Lexical) replaced with plain div for product content — Supabase stores content as string not SerializedEditorState
 
 ### Pending Todos
 
@@ -88,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T16:06:26.986Z
-Stopped at: Completed 04-01-PLAN.md (categories/tags/tenants routers migrated)
+Last session: 2026-03-06T16:12:37.501Z
+Stopped at: Completed 04-03-PLAN.md (reviews/library routers migrated to Supabase)
 Resume file: None

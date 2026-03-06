@@ -1,147 +1,117 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
-
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 
 export const reviewsRouter = createTRPCRouter({
   getOne: protectedProcedure
+    .input(z.object({ productId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      // Verify product exists
+      const { data: product } = await ctx.supabase
+        .from("products")
+        .select("id")
+        .eq("id", input.productId)
+        .maybeSingle();
+
+      if (!product) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
+      }
+
+      const { data: review } = await ctx.supabase
+        .from("reviews")
+        .select("*")
+        .eq("product_id", input.productId)
+        .eq("user_id", ctx.user.id)
+        .maybeSingle();
+
+      return review ?? null;
+    }),
+
+  create: protectedProcedure
     .input(
       z.object({
         productId: z.string(),
-      }),
+        rating: z.number().min(1, { message: "Rating is required" }).max(5),
+        description: z.string().min(1, { message: "Description is required" }),
+      })
     )
-    .query(async ({ ctx, input }) => {
-      const product = await ctx.db.findByID({
-        collection: "products",
-        id: input.productId,
-      });
+    .mutation(async ({ input, ctx }) => {
+      const { data: product } = await ctx.supabase
+        .from("products")
+        .select("id")
+        .eq("id", input.productId)
+        .maybeSingle();
 
       if (!product) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
+      }
+
+      const { data: existing } = await ctx.supabase
+        .from("reviews")
+        .select("id")
+        .eq("product_id", input.productId)
+        .eq("user_id", ctx.user.id)
+        .maybeSingle();
+
+      if (existing) {
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Product not found",
+          code: "BAD_REQUEST",
+          message: "You have already reviewed this product",
         });
       }
 
-      const reviewsData = await ctx.db.find({
-        collection: "reviews",
-        limit: 1,
-        where: {
-          and: [
-            {
-              product: {
-                equals: product.id,
-              }
-            },
-            {
-              user: {
-                equals: ctx.user.id,
-              },
-            },
-          ],
-        },
-      });
+      const { data: review, error } = await ctx.supabase
+        .from("reviews")
+        .insert({
+          user_id: ctx.user.id,
+          product_id: input.productId,
+          rating: input.rating,
+          description: input.description,
+        })
+        .select()
+        .single();
 
-      const review = reviewsData.docs[0];
-
-      if (!review) {
-        return null;
-      }
+      if (error) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: error.message });
 
       return review;
     }),
-    create: protectedProcedure
-      .input(
-        z.object({
-          productId: z.string(),
-          rating: z.number().min(1, { message: "Rating is required" }).max(5),
-          description: z.string().min(1, { message: "Description is required" }),
-        })
-      )
-      .mutation(async ({ input, ctx }) => {
-        const product = await ctx.db.findByID({
-          collection: "products",
-          id: input.productId,
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        reviewId: z.string(),
+        rating: z.number().min(1, { message: "Rating is required" }).max(5),
+        description: z.string().min(1, { message: "Description is required" }),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { data: existingReview } = await ctx.supabase
+        .from("reviews")
+        .select("*")
+        .eq("id", input.reviewId)
+        .maybeSingle();
+
+      if (!existingReview) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Review not found" });
+      }
+
+      // Application-level ownership check (RLS also enforces this)
+      if (existingReview.user_id !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to update this review",
         });
+      }
 
-        if (!product) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Product not found",
-          });
-        }
+      const { data: updatedReview, error } = await ctx.supabase
+        .from("reviews")
+        .update({ rating: input.rating, description: input.description })
+        .eq("id", input.reviewId)
+        .select()
+        .single();
 
-        const existingReviewsData = await ctx.db.find({
-          collection: "reviews",
-          where: {
-            and: [
-              {
-                product: { equals: input.productId }
-              },
-              {
-                user: { equals: ctx.user.id }
-              },
-            ],
-          },
-        });
+      if (error) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: error.message });
 
-        if (existingReviewsData.totalDocs > 0) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "You have already reviewed this product",
-          });
-        }
-
-        const review = await ctx.db.create({
-          collection: "reviews",
-          data: {
-            user: ctx.user.id,
-            product: product.id,
-            rating: input.rating,
-            description: input.description,
-          },
-        });
-
-        return review;
-      }),
-    update: protectedProcedure
-      .input(
-        z.object({
-          reviewId: z.string(),
-          rating: z.number().min(1, { message: "Rating is required" }).max(5),
-          description: z.string().min(1, { message: "Description is required" }),
-        })
-      )
-      .mutation(async ({ input, ctx }) => {
-        const existingReview = await ctx.db.findByID({
-          depth: 0, // exitingReview.user will be the user ID
-          collection: "reviews",
-          id: input.reviewId,
-        });
-
-        if (!existingReview) {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Review not found",
-          });
-        }
-
-        if (existingReview.user !== ctx.user.id) {
-          throw new TRPCError({
-            code: "FORBIDDEN",
-            message: "You are not allowed to update this review",
-          });
-        }
-
-        const updatedReview = await ctx.db.update({
-          collection: "reviews",
-          id: input.reviewId,
-          data: {
-            rating: input.rating,
-            description: input.description,
-          },
-        });
-
-        return updatedReview;
-      }),
+      return updatedReview;
+    }),
 });

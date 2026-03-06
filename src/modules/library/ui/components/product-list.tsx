@@ -22,7 +22,7 @@ export const ProductList = () => {
     },
     {
       getNextPageParam: (lastPage) => {
-        return lastPage.docs.length > 0 ? lastPage.nextPage : undefined;
+        return lastPage.hasNextPage ? lastPage.page + 1 : undefined;
       },
     }
   ));
@@ -46,7 +46,7 @@ export const ProductList = () => {
             id={product.id}
             name={product.name}
             imageUrl={product.image?.url}
-            tenantSlug={product.tenant?.slug}
+            tenantSlug={product.tenant?.slug ?? ""}
             tenantImageUrl={product.tenant?.image?.url}
             reviewRating={product.reviewRating}
             reviewCount={product.reviewCount}

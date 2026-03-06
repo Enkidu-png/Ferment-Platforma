@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 
 ## Current Position
 
-Phase: 3 of 7 (Seed + Verify) — COMPLETE
-Plan: 2 of 2 — COMPLETE
-Status: Phase 3 complete — seed script seeded, 9/9 Playwright smoke tests pass
-Last activity: 2026-03-06 — Phase 3 executed; seed script + Playwright smoke tests
+Phase: 4 of 7 (API Layer Migration) — PLANNED, READY TO EXECUTE
+Plan: 0 of 5 — pending
+Status: Phase 4 planned — 5 plans, 4 waves; Phase 3 complete
+Last activity: 2026-03-06 — Phase 4 planned (5 plans: categories/tags/tenants, products, reviews/library, checkout/webhook, Payload removal)
 
 Progress: [████████░░] 43%
 
@@ -46,7 +46,8 @@ Recent decisions affecting current work:
 - Setup: Keep tRPC — procedures just point to Supabase; no layer replacement, only ctx rewrite
 - Setup: No ORM — Supabase query builder sufficient; avoids disproportionate complexity for non-programmer owner
 - Setup: Build custom admin UI — Supabase dashboard is developer tooling, not content management
-- Setup: Payload stays installed until Phase 7 — parallel operation prevents big-bang cutover risk
+- Setup: Payload removed in Phase 4 (not Phase 7) — user confirmed full Supabase migration; no real data to preserve; dev env only
+- 04: Product CRUD mutations (create/update/delete) don't exist in current codebase — deferred to Phase 6 (custom admin UI)
 - 02-01: Use getUser() not getSession() — getSession() does not validate JWT server-side
 - 02-01: baseProcedure has no middleware — Supabase client injected via createTRPCContext, no wrapper needed
 - 02-02: Use x-middleware-rewrite header mutation (not NextResponse.rewrite) to preserve Supabase session cookies
@@ -69,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-06
-Stopped at: Completed Phase 3 — seed script + Playwright smoke tests; 9/9 tests pass; JWT hook null-safety bug fixed
+Stopped at: Phase 4 planned — 5 plans verified and ready. Next: /gsd:execute-phase 4
 Resume file: None

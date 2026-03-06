@@ -1,16 +1,13 @@
 import { initTRPC, TRPCError } from '@trpc/server';
 import { cache } from 'react';
 import superjson from 'superjson';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
 
 import { createClient } from '@/lib/supabase/server';
 
 export const createTRPCContext = cache(async () => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const db = await getPayload({ config: configPromise });
-  return { supabase, user, db };
+  return { supabase, user };
 });
 
 const t = initTRPC.context<typeof createTRPCContext>().create({

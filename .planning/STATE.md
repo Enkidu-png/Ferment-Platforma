@@ -5,32 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** The marketplace works exactly as before — artists manage their shops, buyers browse and buy — but the backend is Supabase, making the codebase maintainable with AI assistance.
-**Current focus:** Phase 1 — Foundation
+**Current focus:** Phase 4 — tRPC Procedure Rewrites
 
 ## Current Position
 
-Phase: 2 of 7 (Auth Migration)
-Plan: 3 of 3 — COMPLETE
-Status: Phase 2 complete — All 3 plans done; auth views wired to Supabase, PKCE confirm route, /pending page
-Last activity: 2026-03-06 — Phase 2 Plan 03 executed; sign-in/sign-up rewired, /auth/confirm route, /pending page
+Phase: 3 of 7 (Seed + Verify) — COMPLETE
+Plan: 2 of 2 — COMPLETE
+Status: Phase 3 complete — seed script seeded, 9/9 Playwright smoke tests pass
+Last activity: 2026-03-06 — Phase 3 executed; seed script + Playwright smoke tests
 
-Progress: [█████░░░░░] 29%
+Progress: [████████░░] 43%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: ~5 min
-- Total execution time: ~0.24 hours
+- Total plans completed: 5
+- Average duration: ~7 min
+- Total execution time: ~0.58 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 02 Auth Migration | 3 | ~14 min | ~5 min |
+| 03 Seed + Verify | 2 | ~21 min | ~10 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (2.5 min), 02-02 (3 min), 02-03 (8 min)
+- Last 5 plans: 02-01 (2.5 min), 02-02 (3 min), 02-03 (8 min), 03-01 (5 min), 03-02 (16 min)
 - Trend: Consistent
 
 *Updated after each plan completion*
@@ -52,6 +53,9 @@ Recent decisions affecting current work:
 - 02-02: cookieOptions undefined in development — setting .ferment.com domain on localhost causes browsers to reject cookies
 - 02-03: tenants.stripe_account_id is NOT NULL with no default — insert empty string placeholder until Stripe onboarding (Phase 4)
 - 02-03: tenants has no user_id column — user linked via user_tenants join table after tenant creation in confirm route
+- 03-01: stripe_account_id uses 'placeholder_{slug}' per tenant (not empty string — empty string conflicts on re-runs)
+- 03-02: Playwright uses locator('input').first() not getByLabel — shadcn FormLabel unreliable with Playwright's label association detection
+- 03-02: custom_access_token_hook had null-safety bug — fixed with coalesce(event->'claims', '{}'::jsonb); migration applied
 
 ### Pending Todos
 
@@ -59,13 +63,11 @@ None yet.
 
 ### Blockers/Concerns
 
-- Phase 1: JWT custom claims hook registration syntax may have changed in Supabase Auth — verify against current Supabase docs before implementing (MEDIUM confidence)
 - Phase 2: `@supabase/ssr` cookie handling behavior with Next.js 15 async `cookies()` API needs runtime verification
-- Phase 3: `supabase.auth.admin.createUser()` parameter shape for passwordless batch creation needs verification
 - Phase 5: Confirm whether Supabase Storage image transforms (Imgproxy) require Pro plan or are available on Free tier
 
 ## Session Continuity
 
 Last session: 2026-03-06
-Stopped at: Completed Phase 2 Plan 03 — auth views rewired to Supabase, /auth/confirm route, /pending page; Phase 2 complete
+Stopped at: Completed Phase 3 — seed script + Playwright smoke tests; 9/9 tests pass; JWT hook null-safety bug fixed
 Resume file: None

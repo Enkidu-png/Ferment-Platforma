@@ -26,7 +26,7 @@ export const libraryRouter = createTRPCRouter({
             },
             {
               user: {
-                equals: ctx.session.user.id,
+                equals: ctx.user.id,
               },
             },
           ],
@@ -71,7 +71,7 @@ export const libraryRouter = createTRPCRouter({
         limit: input.limit,
         where: {
           user: {
-            equals: ctx.session.user.id,
+            equals: ctx.user.id,
           },
         },
       });

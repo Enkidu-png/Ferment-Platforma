@@ -16,7 +16,7 @@ export const checkoutRouter = createTRPCRouter({
     .mutation(async ({ ctx }) => {
       const user = await ctx.db.findByID({
         collection: "users",
-        id: ctx.session.user.id,
+        id: ctx.user.id,
         depth: 0, // user.tenants[0].tenant is going to be a string (tenant ID)
       });
 
@@ -148,7 +148,7 @@ export const checkoutRouter = createTRPCRouter({
       const domain = generateTenantURL(input.tenantSlug);
 
       const checkout = await stripe.checkout.sessions.create({
-        customer_email: ctx.session.user.email,
+        customer_email: ctx.user.email,
         success_url: `${domain}/checkout?success=true`,
         cancel_url: `${domain}/checkout?cancel=true`,
         mode: "payment",
@@ -157,7 +157,7 @@ export const checkoutRouter = createTRPCRouter({
           enabled: true,
         },
         metadata: {
-          userId: ctx.session.user.id,
+          userId: ctx.user.id,
         } as CheckoutMetadata,
         payment_intent_data: {
           application_fee_amount: platformFeeAmount,

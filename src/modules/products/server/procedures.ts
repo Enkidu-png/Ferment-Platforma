@@ -1,7 +1,6 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
 import type { Sort, Where } from "payload";
-import { headers as getHeaders } from "next/headers";
 
 import { DEFAULT_LIMIT } from "@/constants";
 import { Category, Media, Tenant } from "@/payload-types";
@@ -17,9 +16,6 @@ export const productsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const headers = await getHeaders();
-      const session = await ctx.db.auth({ headers });
-
       const product = await ctx.db.findByID({
         collection: "products",
         id: input.id,
@@ -38,7 +34,7 @@ export const productsRouter = createTRPCRouter({
 
       let isPurchased = false;
 
-      if (session.user) {
+      if (ctx.user) {
         const ordersData = await ctx.db.find({
           collection: "orders",
           pagination: false,
@@ -52,7 +48,7 @@ export const productsRouter = createTRPCRouter({
               },
               {
                 user: {
-                  equals: session.user.id,
+                  equals: ctx.user.id,
                 },
               },
             ],

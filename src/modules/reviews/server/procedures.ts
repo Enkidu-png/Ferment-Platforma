@@ -35,7 +35,7 @@ export const reviewsRouter = createTRPCRouter({
             },
             {
               user: {
-                equals: ctx.session.user.id,
+                equals: ctx.user.id,
               },
             },
           ],
@@ -79,7 +79,7 @@ export const reviewsRouter = createTRPCRouter({
                 product: { equals: input.productId }
               },
               {
-                user: { equals: ctx.session.user.id }
+                user: { equals: ctx.user.id }
               },
             ],
           },
@@ -95,7 +95,7 @@ export const reviewsRouter = createTRPCRouter({
         const review = await ctx.db.create({
           collection: "reviews",
           data: {
-            user: ctx.session.user.id,
+            user: ctx.user.id,
             product: product.id,
             rating: input.rating,
             description: input.description,
@@ -126,7 +126,7 @@ export const reviewsRouter = createTRPCRouter({
           });
         }
 
-        if (existingReview.user !== ctx.session.user.id) {
+        if (existingReview.user !== ctx.user.id) {
           throw new TRPCError({
             code: "FORBIDDEN",
             message: "You are not allowed to update this review",

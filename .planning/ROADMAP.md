@@ -32,7 +32,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. An authenticated request carries a JWT that includes `tenant_id` and `app_role` claims (verified via Supabase JWT inspector)
   4. Four Supabase client factory files exist in `src/lib/supabase/` and the app compiles with no TypeScript errors
   5. Environment variables for Supabase are configured and the app connects to Supabase without connection errors
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [x] 01-01-PLAN.md — Supabase project setup + client factory files
+- [x] 01-02-PLAN.md — Database schema (10 tables) + RLS policies
+- [x] 01-03-PLAN.md — JWT custom claims hook + generated types
 
 ### Phase 2: Auth Migration
 **Goal**: Supabase Auth fully replaces Payload authentication — users can log in, stay logged in across browser sessions, and the tRPC context uses the Supabase client so all downstream procedure rewrites can proceed
@@ -44,7 +48,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A new artist can register, and a pending tenant row appears in the tenants table
   4. Subdomain routing continues working after the middleware rewrite (visiting artist.ferment.com still resolves the correct storefront)
   5. `ctx.supabase` is available in tRPC procedures and `protectedProcedure` rejects unauthenticated requests with a 401
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 02-01-PLAN.md — tRPC context rewrite (ctx.supabase + protectedProcedure) + auth procedures simplification + schemas update
+- [ ] 02-02-PLAN.md — Middleware composition (Supabase session refresh + subdomain routing) + subdomain cookie config
+- [ ] 02-03-PLAN.md — Sign-in/sign-up views rewire + /auth/confirm route + /pending page
 
 ### Phase 3: Data Migration
 **Goal**: All real artist and product data from MongoDB is faithfully preserved in Supabase PostgreSQL with all relationships intact, ready for the application to use
@@ -109,8 +117,8 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/TBD | Not started | - |
-| 2. Auth Migration | 0/TBD | Not started | - |
+| 1. Foundation | 3/3 | Complete | 2026-03-06 |
+| 2. Auth Migration | 0/3 | Planned | - |
 | 3. Data Migration | 0/TBD | Not started | - |
 | 4. API Layer Migration | 0/TBD | Not started | - |
 | 5. Storage Migration | 0/TBD | Not started | - |
@@ -119,4 +127,4 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 
 ---
 *Roadmap created: 2026-02-24*
-*Last updated: 2026-02-24 after initial creation*
+*Last updated: 2026-03-06 — Phase 2 plans written*

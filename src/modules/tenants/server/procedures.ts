@@ -1,8 +1,12 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
-import { Media, Tenant } from "@/payload-types";
+import type { Tables } from "@/lib/supabase/types";
 
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+
+type TenantWithImage = Tables<"tenants"> & {
+  image: Tables<"media"> | null;
+};
 
 export const tenantsRouter = createTRPCRouter({
   getOne: baseProcedure
@@ -12,24 +16,18 @@ export const tenantsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const tenantsData = await ctx.db.find({
-        collection: "tenants",
-        depth: 1, // "tenant.image" is a type of "Media"
-        where: {
-          slug: {
-            equals: input.slug,
-          },
-        },
-        limit: 1,
-        pagination: false,
-      });
+      const { data: tenant, error } = await ctx.supabase
+        .from("tenants")
+        .select("*, image:media!image_id(*)")
+        .eq("slug", input.slug)
+        .maybeSingle();
 
-      const tenant = tenantsData.docs[0];
+      if (error) throw new Error(error.message);
 
       if (!tenant) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Tenant not found" });
       }
 
-      return tenant as Tenant & { image: Media | null };
+      return tenant as unknown as TenantWithImage;
     }),
 });

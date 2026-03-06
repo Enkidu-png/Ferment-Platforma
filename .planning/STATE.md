@@ -48,6 +48,8 @@ Recent decisions affecting current work:
 - Setup: Payload stays installed until Phase 7 — parallel operation prevents big-bang cutover risk
 - 02-01: Use getUser() not getSession() — getSession() does not validate JWT server-side
 - 02-01: baseProcedure has no middleware — Supabase client injected via createTRPCContext, no wrapper needed
+- 02-02: Use x-middleware-rewrite header mutation (not NextResponse.rewrite) to preserve Supabase session cookies
+- 02-02: cookieOptions undefined in development — setting .ferment.com domain on localhost causes browsers to reject cookies
 
 ### Pending Todos
 
@@ -63,5 +65,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-06
-Stopped at: Completed Phase 2 Plan 01 — tRPC init rewritten, auth procedures simplified
+Stopped at: Completed Phase 2 Plan 02 — Supabase middleware composed, subdomain cookie sharing configured
 Resume file: None

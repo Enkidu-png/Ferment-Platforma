@@ -10,27 +10,27 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 2 of 7 (Auth Migration)
-Plan: 2 of 3 — COMPLETE
-Status: Phase 2 in progress — Plans 01-02 done; Supabase middleware + subdomain cookies configured
-Last activity: 2026-03-06 — Phase 2 Plan 02 executed; middleware composed, subdomain cookie sharing in place
+Plan: 3 of 3 — COMPLETE
+Status: Phase 2 complete — All 3 plans done; auth views wired to Supabase, PKCE confirm route, /pending page
+Last activity: 2026-03-06 — Phase 2 Plan 03 executed; sign-in/sign-up rewired, /auth/confirm route, /pending page
 
-Progress: [████░░░░░░] 21%
+Progress: [█████░░░░░] 29%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: ~3 min
-- Total execution time: ~0.09 hours
+- Total plans completed: 3
+- Average duration: ~5 min
+- Total execution time: ~0.24 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 02 Auth Migration | 2 | ~6 min | ~3 min |
+| 02 Auth Migration | 3 | ~14 min | ~5 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (2.5 min), 02-02 (3 min)
+- Last 5 plans: 02-01 (2.5 min), 02-02 (3 min), 02-03 (8 min)
 - Trend: Consistent
 
 *Updated after each plan completion*
@@ -50,6 +50,8 @@ Recent decisions affecting current work:
 - 02-01: baseProcedure has no middleware — Supabase client injected via createTRPCContext, no wrapper needed
 - 02-02: Use x-middleware-rewrite header mutation (not NextResponse.rewrite) to preserve Supabase session cookies
 - 02-02: cookieOptions undefined in development — setting .ferment.com domain on localhost causes browsers to reject cookies
+- 02-03: tenants.stripe_account_id is NOT NULL with no default — insert empty string placeholder until Stripe onboarding (Phase 4)
+- 02-03: tenants has no user_id column — user linked via user_tenants join table after tenant creation in confirm route
 
 ### Pending Todos
 
@@ -65,5 +67,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-06
-Stopped at: Completed Phase 2 Plan 02 — Supabase middleware composed, subdomain cookie sharing configured
+Stopped at: Completed Phase 2 Plan 03 — auth views rewired to Supabase, /auth/confirm route, /pending page; Phase 2 complete
 Resume file: None

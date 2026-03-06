@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-03-PLAN.md (reviews/library routers migrated to Supabase)
-last_updated: "2026-03-06T16:12:43.769Z"
+stopped_at: Completed 04-02-PLAN.md (products router migrated to Supabase)
+last_updated: "2026-03-06T16:14:06.262Z"
 last_activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
 progress:
   total_phases: 7
   completed_phases: 3
   total_plans: 13
-  completed_plans: 10
+  completed_plans: 11
   percent: 77
 ---
 
@@ -68,6 +68,7 @@ Progress: [███████░░░] 69%
 - Trend: Consistent
 
 *Updated after each plan completion*
+| Phase 04-api-layer-migration P02 | 14 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,8 @@ Recent decisions affecting current work:
 - [Phase 04]: reviews ownership check uses existingReview.user_id !== ctx.user.id (Supabase field name, not user)
 - [Phase 04]: library.getMany uses two-step orders→products query pattern (PostgREST has no populate; two fetches required)
 - [Phase 04]: RichText (Payload Lexical) replaced with plain div for product content — Supabase stores content as string not SerializedEditorState
+- [Phase 04]: Cast complex PostgREST join results via unknown as ProductRow — Supabase TypeScript client returns GenericStringError for aliased join strings
+- [Phase 04]: getNextPageParam uses hasNextPage/page+1 — Payload nextPage field replaced with explicit boolean in new Supabase response shape
 
 ### Pending Todos
 
@@ -107,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T16:12:37.501Z
-Stopped at: Completed 04-03-PLAN.md (reviews/library routers migrated to Supabase)
+Last session: 2026-03-06T16:14:06.258Z
+Stopped at: Completed 04-02-PLAN.md (products router migrated to Supabase)
 Resume file: None

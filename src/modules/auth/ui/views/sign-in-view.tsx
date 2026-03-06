@@ -2,13 +2,12 @@
 
 import z from "zod";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { useTRPC } from "@/trpc/client";
+import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,18 +24,8 @@ import { loginSchema } from "../../schemas";
 export const SignInView = () => {
   const router = useRouter();
 
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
-
-  const login = useMutation(trpc.auth.login.mutationOptions({
-    onError: (error) => {
-      toast.error(error.message);
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
-      router.push("/");
-    },
-  }));
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
 
   const form = useForm<z.infer<typeof loginSchema>>({
     mode: "all",
@@ -47,9 +36,21 @@ export const SignInView = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    login.mutate(values)
-  }
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    setAuthError(null);
+    setIsPending(true);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
+    setIsPending(false);
+    if (error) {
+      setAuthError(error.message);
+      return;
+    }
+    router.push("/");
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5">
@@ -103,8 +104,11 @@ export const SignInView = () => {
                 </FormItem>
               )}
             />
+            {authError && (
+              <p className="text-sm text-red-600">{authError}</p>
+            )}
             <Button
-              disabled={login.isPending}
+              disabled={isPending}
               type="submit"
               size="lg"
               variant="elevated"
@@ -117,7 +121,7 @@ export const SignInView = () => {
       </div>
       <div
         className="h-screen w-full lg:col-span-2 hidden lg:block"
-        style={{ 
+        style={{
           backgroundImage: "url('/auth-bg.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",

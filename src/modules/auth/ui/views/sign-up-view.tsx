@@ -2,14 +2,13 @@
 
 import z from "zod";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { cn } from "@/lib/utils";
-import { useTRPC } from "@/trpc/client";
+import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,18 +26,9 @@ import { registerSchema } from "../../schemas";
 export const SignUpView = () => {
   const router = useRouter();
 
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
-
-  const register = useMutation(trpc.auth.register.mutationOptions({
-    onError: (error) => {
-      toast.error(error.message);
-    },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
-      router.push("/");
-    },
-  }));
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const [confirmationSent, setConfirmationSent] = useState(false);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     mode: "all",
@@ -46,18 +36,57 @@ export const SignUpView = () => {
     defaultValues: {
       email: "",
       password: "",
-      username: "",
+      shopName: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    register.mutate(values)
+  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+    setAuthError(null);
+    setIsPending(true);
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+      options: {
+        data: { shop_name: values.shopName },
+      },
+    });
+    setIsPending(false);
+    if (error) {
+      setAuthError(error.message);
+      return;
+    }
+    void data;
+    setConfirmationSent(true);
+  };
+
+  const shopName = form.watch("shopName");
+  const shopNameErrors = form.formState.errors.shopName;
+
+  const showPreview = shopName && !shopNameErrors;
+
+  if (confirmationSent) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-5">
+        <div className="bg-[#F4F4F0] h-screen w-full lg:col-span-3 flex items-center justify-center p-16">
+          <div className="flex flex-col gap-4 max-w-md">
+            <h1 className="text-4xl font-medium">Check your email.</h1>
+            <p className="text-base text-gray-600">
+              We sent a confirmation link to your email address. Click the link to activate your account.
+            </p>
+          </div>
+        </div>
+        <div
+          className="h-screen w-full lg:col-span-2 hidden lg:block"
+          style={{
+            backgroundImage: "url('/auth-bg.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      </div>
+    );
   }
-
-  const username = form.watch("username");
-  const usernameErrors = form.formState.errors.username;
-
-  const showPreview = username && !usernameErrors;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5">
@@ -88,10 +117,10 @@ export const SignUpView = () => {
               Join over 1,580 creators earning money on FERMENT.
             </h1>
             <FormField
-              name="username"
+              name="shopName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-base">Username</FormLabel>
+                  <FormLabel className="text-base">Shop name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -99,8 +128,7 @@ export const SignUpView = () => {
                     className={cn("hidden", showPreview && "block")}
                   >
                     Your store will be available at&nbsp;
-                    {/* TODO: Use proper method to generate preview url */}
-                    <strong>{username}</strong>.shop.com
+                    <strong>{shopName}</strong>.ferment.com
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -130,8 +158,11 @@ export const SignUpView = () => {
                 </FormItem>
               )}
             />
+            {authError && (
+              <p className="text-sm text-red-600">{authError}</p>
+            )}
             <Button
-              disabled={register.isPending}
+              disabled={isPending}
               type="submit"
               size="lg"
               variant="elevated"
@@ -144,7 +175,7 @@ export const SignUpView = () => {
       </div>
       <div
         className="h-screen w-full lg:col-span-2 hidden lg:block"
-        style={{ 
+        style={{
           backgroundImage: "url('/auth-bg.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",

@@ -1,113 +1,100 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
-import type { Sort, Where } from "payload";
+import type { Tables } from "@/lib/supabase/types";
 
 import { DEFAULT_LIMIT } from "@/constants";
-import { Category, Media, Tenant } from "@/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 
 import { sortValues } from "../search-params";
 
+type Media = Tables<"media">;
+type Tenant = Tables<"tenants"> & { image: Media | null };
+type Category = Tables<"categories">;
+
+type ProductRow = Tables<"products"> & {
+  image: Media | null;
+  tenant: Tenant | null;
+  category: Category | null;
+};
+
+type ProductRowWithReviews = ProductRow & {
+  reviewCount: number;
+  reviewRating: number;
+};
+
 export const productsRouter = createTRPCRouter({
   getOne: baseProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      })
-    )
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const product = await ctx.db.findByID({
-        collection: "products",
-        id: input.id,
-        depth: 2, // Load the "product.image", "product.tenant", and "product.tenant.image"
-        select: {
-          content: false,
-        },
-      });
+      const { data: rawProduct, error } = await ctx.supabase
+        .from("products")
+        .select(
+          "id, name, description, price, is_archived, is_private, refund_policy, " +
+          "image:media!image_id(*), " +
+          "tenant:tenants!tenant_id(*, image:media!image_id(*)), " +
+          "category:categories!category_id(*)"
+        )
+        .eq("id", input.id)
+        .single();
 
-      if (product.isArchived) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Product not found",
-        })
+      const product = rawProduct as unknown as ProductRow | null;
+
+      if (error || !product) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
+      }
+
+      if (product.is_archived) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
       }
 
       let isPurchased = false;
 
       if (ctx.user) {
-        const ordersData = await ctx.db.find({
-          collection: "orders",
-          pagination: false,
-          limit: 1,
-          where: {
-            and: [
-              {
-                product: {
-                  equals: input.id,
-                },
-              },
-              {
-                user: {
-                  equals: ctx.user.id,
-                },
-              },
-            ],
-          },
-        });
+        const { data: order } = await ctx.supabase
+          .from("orders")
+          .select("id")
+          .eq("product_id", input.id)
+          .eq("user_id", ctx.user.id)
+          .maybeSingle();
 
-        isPurchased = !!ordersData.docs[0];
+        isPurchased = !!order;
       }
 
-      const reviews = await ctx.db.find({
-        collection: "reviews",
-        pagination: false,
-        where: {
-          product: {
-            equals: input.id,
-          },
-        },
-      });
+      const { data: reviewRows } = await ctx.supabase
+        .from("reviews")
+        .select("rating")
+        .eq("product_id", input.id);
+
+      const reviews = reviewRows ?? [];
+      const totalDocs = reviews.length;
 
       const reviewRating =
-        reviews.docs.length > 0
-        ? reviews.docs.reduce((acc, review) => acc + review.rating, 0) / reviews.totalDocs
-        : 0;
+        totalDocs > 0
+          ? reviews.reduce((acc, r) => acc + r.rating, 0) / totalDocs
+          : 0;
 
-      const ratingDistribution: Record<number, number> = {
-        5: 0,
-        4: 0,
-        3: 0,
-        2: 0,
-        1: 0,
-      };
+      const ratingDistribution: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
-      if (reviews.totalDocs > 0) {
-        reviews.docs.forEach((review) => {
-          const rating = review.rating;
-
-          if (rating >= 1 && rating <= 5) {
-            ratingDistribution[rating] = (ratingDistribution[rating] || 0) + 1;
+      if (totalDocs > 0) {
+        reviews.forEach((r) => {
+          if (r.rating >= 1 && r.rating <= 5) {
+            ratingDistribution[r.rating] = (ratingDistribution[r.rating] || 0) + 1;
           }
         });
-
         Object.keys(ratingDistribution).forEach((key) => {
           const rating = Number(key);
-          const count = ratingDistribution[rating] || 0;
-          ratingDistribution[rating] = Math.round(
-            (count / reviews.totalDocs) * 100,
-          );
+          const val = ratingDistribution[rating] ?? 0;
+          ratingDistribution[rating] = Math.round((val / totalDocs) * 100);
         });
       }
 
       return {
         ...product,
         isPurchased,
-        image: product.image as Media | null,
-        tenant: product.tenant as Tenant & { image: Media | null },
         reviewRating,
-        reviewCount: reviews.totalDocs,
+        reviewCount: totalDocs,
         ratingDistribution,
-      }
+      };
     }),
   getMany: baseProcedure
     .input(
@@ -124,144 +111,157 @@ export const productsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const where: Where = {
-        isArchived: {
-          not_equals: true,
-        },
-      };
-      let sort: Sort = "-createdAt";
+      const from = (input.cursor - 1) * input.limit;
+      const to = from + input.limit - 1;
 
-      if (input.sort === "curated") {
-        sort = "-createdAt";
-      }
+      // Build query
+      let query = ctx.supabase
+        .from("products")
+        .select(
+          "id, name, description, price, is_archived, is_private, refund_policy, " +
+          "image:media!image_id(*), " +
+          "tenant:tenants!tenant_id(*, image:media!image_id(*)), " +
+          "category:categories!category_id(*)",
+          { count: "exact" }
+        )
+        .eq("is_archived", false);
 
-      if (input.sort === "hot_and_new") {
-        sort = "+createdAt";
-      }
-
-      if (input.sort === "trending") {
-        sort = "-createdAt";
-      }
-
-      if (input.minPrice && input.maxPrice) {
-        where.price = {
-          greater_than_equal: input.minPrice,
-          less_than_equal: input.maxPrice,
-        }
-      } else if (input.minPrice) {
-        where.price = {
-          greater_than_equal: input.minPrice
-        }
-      } else if (input.maxPrice) {
-        where.price = {
-          less_than_equal: input.maxPrice
-        }
-      }
-
+      // Tenant slug filter (two-step)
       if (input.tenantSlug) {
-        where["tenant.slug"] = {
-          equals: input.tenantSlug,
-        };
+        const { data: tenantRow } = await ctx.supabase
+          .from("tenants")
+          .select("id")
+          .eq("slug", input.tenantSlug)
+          .single();
+
+        if (!tenantRow) {
+          // Tenant not found — return empty result
+          return {
+            docs: [] as ProductRowWithReviews[],
+            totalDocs: 0,
+            page: input.cursor,
+            limit: input.limit,
+            totalPages: 0,
+            hasNextPage: false,
+            hasPrevPage: false,
+          };
+        }
+
+        query = query.eq("tenant_id", tenantRow.id);
       } else {
-        // If we are loading products for public storefront (no tenantSlug)
-        // Make sure to not load products set to "isPrivate: true" (using reverse not_equals logic)
-        // These products are exclusively private to the tenant store
-
-        where["isPrivate"] = {
-          not_equals: true,
-        }
+        // Global marketplace — hide private products
+        query = query.eq("is_private", false);
       }
-      
+
+      // Price filters
+      if (input.minPrice) query = query.gte("price", Number(input.minPrice));
+      if (input.maxPrice) query = query.lte("price", Number(input.maxPrice));
+
+      // Search filter
+      if (input.search) query = query.ilike("name", `%${input.search}%`);
+
+      // Category filter (two-step: fetch parent + subcategory IDs)
       if (input.category) {
-        const categoriesData = await ctx.db.find({
-          collection: "categories",
-          limit: 1,
-          depth: 1, // Populate subcategories, subcategores.[0] will be a type of "Category"
-          pagination: false,
-          where: {
-            slug: {
-              equals: input.category,
-            }
-          }
-        });
+        const { data: cat } = await ctx.supabase
+          .from("categories")
+          .select("id, subcategories:categories!parent_id(id)")
+          .eq("slug", input.category)
+          .maybeSingle();
 
-        const formattedData = categoriesData.docs.map((doc) => ({
-          ...doc,
-          subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
-            // Because of "depth: 1" we are confident "doc" will be a type of "Category"
-            ...(doc as Category),
-            subcategories: undefined,
-          }))
-        }));
-
-        const subcategoriesSlugs = [];
-        const parentCategory = formattedData[0];
-
-        if (parentCategory) {
-          subcategoriesSlugs.push(
-            ...parentCategory.subcategories.map((subcategory) => subcategory.slug)
-          )
-
-          where["category.slug"] = {
-            in: [parentCategory.slug, ...subcategoriesSlugs]
-          }
+        if (cat) {
+          const catTyped = cat as unknown as { id: string; subcategories: { id: string }[] | null };
+          const categoryIds = [
+            catTyped.id,
+            ...(catTyped.subcategories ?? []).map((s) => s.id),
+          ];
+          query = query.in("category_id", categoryIds);
         }
       }
 
+      // Tag filter (three-step: tag names → tag IDs → product IDs)
       if (input.tags && input.tags.length > 0) {
-        where["tags.name"] = {
-          in: input.tags,
-        };
+        const { data: tagRows } = await ctx.supabase
+          .from("tags")
+          .select("id")
+          .in("name", input.tags);
+
+        if (!tagRows || tagRows.length === 0) {
+          // No matching tags — return empty
+          return {
+            docs: [] as ProductRowWithReviews[],
+            totalDocs: 0,
+            page: input.cursor,
+            limit: input.limit,
+            totalPages: 0,
+            hasNextPage: false,
+            hasPrevPage: false,
+          };
+        }
+
+        const { data: ptRows } = await ctx.supabase
+          .from("product_tags")
+          .select("product_id")
+          .in("tag_id", tagRows.map((t) => t.id));
+
+        const productIds = (ptRows ?? []).map((pt) => pt.product_id);
+
+        if (productIds.length === 0) {
+          return {
+            docs: [] as ProductRowWithReviews[],
+            totalDocs: 0,
+            page: input.cursor,
+            limit: input.limit,
+            totalPages: 0,
+            hasNextPage: false,
+            hasPrevPage: false,
+          };
+        }
+
+        query = query.in("id", productIds);
       }
 
-      if (input.search) {
-        where["name"] = {
-          like: input.search,
-        };
-      }
+      // Sort
+      const ascending = input.sort === "hot_and_new";
+      query = query.order("created_at", { ascending });
 
-      const data = await ctx.db.find({
-        collection: "products",
-        depth: 2, // Populate "category", "image", "tenant" & "tenant.image"
-        where,
-        sort,
-        page: input.cursor,
-        limit: input.limit,
-        select: {
-          content: false,
-        },
-      });
+      // Pagination
+      query = query.range(from, to);
 
-      const dataWithSummarizedReviews = await Promise.all(
-        data.docs.map(async (doc) => {
-          const reviewsData = await ctx.db.find({
-            collection: "reviews",
-            pagination: false,
-            where: {
-              product: {
-                equals: doc.id,
-              },
-            },
-          });
+      const { data: rawData, count, error } = await query;
 
+      if (error) throw new Error(error.message);
+
+      const docs = (rawData ?? []) as unknown as ProductRow[];
+      const totalDocs = count ?? 0;
+
+      // N+1 review ratings — acceptable for current data volume (20 products)
+      const docsWithReviews: ProductRowWithReviews[] = await Promise.all(
+        docs.map(async (doc) => {
+          const { data: reviewRows } = await ctx.supabase
+            .from("reviews")
+            .select("rating")
+            .eq("product_id", doc.id);
+
+          const reviews = reviewRows ?? [];
           return {
             ...doc,
-            reviewCount: reviewsData.totalDocs,
+            reviewCount: reviews.length,
             reviewRating:
-              reviewsData.docs.length === 0
+              reviews.length === 0
                 ? 0
-                : reviewsData.docs.reduce((acc, review) => acc + review.rating, 0) / reviewsData.totalDocs
-          }
+                : reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length,
+          };
         })
       );
 
       return {
-        ...data,
-        docs: dataWithSummarizedReviews.map((doc) => ({
-          ...doc,
-          image: doc.image as Media | null,
-          tenant: doc.tenant as Tenant & { image: Media | null },
-        }))
-      }
+        docs: docsWithReviews,
+        totalDocs,
+        page: input.cursor,
+        limit: input.limit,
+        totalPages: Math.ceil(totalDocs / input.limit),
+        hasNextPage: input.cursor * input.limit < totalDocs,
+        hasPrevPage: input.cursor > 1,
+      };
     }),
 });

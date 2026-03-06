@@ -55,15 +55,18 @@ Plans:
 - [ ] 02-03-PLAN.md — Sign-in/sign-up views rewire + /auth/confirm route + /pending page
 
 ### Phase 3: Data Migration
-**Goal**: All real artist and product data from MongoDB is faithfully preserved in Supabase PostgreSQL with all relationships intact, ready for the application to use
+**Goal**: The Supabase database is populated with a complete working dataset (admin + test artists + products + categories) and end-to-end smoke tests confirm the app works after Phases 1 and 2
 **Depends on**: Phase 1
 **Requirements**: DATA-01, DATA-02, DATA-03, DATA-04, DATA-05
 **Success Criteria** (what must be TRUE):
-  1. The migration script runs in dry-run mode and reports the expected row counts for all 8 collections with zero errors
-  2. After live run, every tenant row has a matching Supabase Auth user record and every product row has a valid tenant FK
-  3. Stripe account IDs and webhook metadata reference the new PostgreSQL UUIDs (no MongoDB ObjectId strings remain in orders or Stripe metadata)
-  4. Running the migration script a second time produces no duplicate rows and no errors (idempotent)
-**Plans**: TBD
+  1. The seed script runs without errors and creates admin user, 3 artist tenants, 8 category trees, and ~20 products
+  2. Running the seed script a second time produces no duplicate rows and no errors (idempotent)
+  3. All tenant rows have status='approved' and a unique stripe_account_id placeholder
+  4. Playwright smoke tests pass: sign-in, sign-up, /pending, subdomain storefront, category filter
+**Plans**: 2 plans
+Plans:
+- [ ] 03-01-PLAN.md — Seed script (admin + artists + categories + products) + .env.local credentials
+- [ ] 03-02-PLAN.md — Playwright install + smoke tests (auth routes + storefront subdomain)
 
 ### Phase 4: API Layer Migration
 **Goal**: Every tRPC router reads and writes data through the Supabase client — the application works end-to-end using PostgreSQL, with tenant isolation enforced by RLS on every user-facing query
@@ -119,7 +122,7 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-06 |
 | 2. Auth Migration | 1/3 | In progress | - |
-| 3. Data Migration | 0/TBD | Not started | - |
+| 3. Data Migration | 0/2 | Not started | - |
 | 4. API Layer Migration | 0/TBD | Not started | - |
 | 5. Storage Migration | 0/TBD | Not started | - |
 | 6. Custom Admin UI | 0/TBD | Not started | - |
@@ -127,4 +130,4 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 
 ---
 *Roadmap created: 2026-02-24*
-*Last updated: 2026-03-06 — Phase 2 plans written*
+*Last updated: 2026-03-06 — Phase 3 plans written (seed + Playwright smoke tests)*

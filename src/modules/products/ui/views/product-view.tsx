@@ -7,7 +7,6 @@ import dynamic from "next/dynamic";
 import { toast } from "sonner";
 import { CheckIcon, LinkIcon, StarIcon } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { RichText } from "@payloadcms/richtext-lexical/react";
 
 import { useTRPC } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
@@ -61,17 +60,17 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 
               <div className="px-6 py-4 flex items-center justify-center lg:border-r">
                 <Link href={generateTenantURL(tenantSlug)} className="flex items-center gap-2">
-                  {data.tenant.image?.url && (
+                  {data.tenant?.image?.url && (
                     <Image
                       src={data.tenant.image.url}
-                      alt={data.tenant.name}
+                      alt={data.tenant?.name ?? ""}
                       width={20}
                       height={20}
                       className="rounded-full border shrink-0 size-[20px]"
                     />
                   )}
                   <p className="text-base underline font-medium">
-                    {data.tenant.name}
+                    {data.tenant?.name}
                   </p>
                 </Link>
               </div>
@@ -103,7 +102,7 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
 
             <div className="p-6">
               {data.description ? (
-                <RichText data={data.description} />
+                <p className="font-medium">{data.description}</p>
               ) : (
                 <p className="font-medium text-muted-foreground italic">
                   No description provided
@@ -140,9 +139,9 @@ export const ProductView = ({ productId, tenantSlug }: ProductViewProps) => {
                 </div>
 
                 <p className="text-center font-medium">
-                  {data.refundPolicy === "no-refunds"
+                  {data.refund_policy === "no-refunds"
                     ? "No refunds"
-                    : `${data.refundPolicy} money back guarantee`
+                    : `${data.refund_policy} money back guarantee`
                   }
                 </p>
               </div>

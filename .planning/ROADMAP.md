@@ -77,7 +77,13 @@ Plans:
   2. An artist can add, edit, and delete their own products through the application UI
   3. A buyer can complete checkout and a Stripe webhook creates an order row in the orders table with the correct UUID product and tenant references
   4. No tRPC procedure references `ctx.db` or any Payload collection name — only `ctx.supabase.from(...)` calls remain
-**Plans**: TBD
+**Plans**: 5 plans
+Plans:
+- [ ] 04-01-PLAN.md — categories + tags + tenants routers + subcategory-menu.tsx (Payload types removed)
+- [ ] 04-02-PLAN.md — products router (two-step filters: tenant slug, category, tags)
+- [ ] 04-03-PLAN.md — reviews + library routers (user_id/product_id field names)
+- [ ] 04-04-PLAN.md — checkout router (user_tenants join) + Stripe webhook (supabaseAdmin)
+- [ ] 04-05-PLAN.md — remove ctx.db from tRPC init + delete Payload files + compile + Playwright green
 
 ### Phase 5: Storage Migration
 **Goal**: All product images and media files are served from Supabase Storage — no Vercel Blob URLs remain anywhere in the database or application code
@@ -123,11 +129,11 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | 1. Foundation | 3/3 | Complete | 2026-03-06 |
 | 2. Auth Migration | 1/3 | In progress | - |
 | 3. Data Migration | 0/2 | Not started | - |
-| 4. API Layer Migration | 0/TBD | Not started | - |
+| 4. API Layer Migration | 0/5 | Not started | - |
 | 5. Storage Migration | 0/TBD | Not started | - |
 | 6. Custom Admin UI | 0/TBD | Not started | - |
 | 7. Payload Removal + Cutover | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-24*
-*Last updated: 2026-03-06 — Phase 3 plans written (seed + Playwright smoke tests)*
+*Last updated: 2026-03-06 — Phase 4 plans written (5 plans: tRPC rewrites + Payload file deletion)*

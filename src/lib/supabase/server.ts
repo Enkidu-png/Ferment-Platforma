@@ -5,10 +5,20 @@ import type { Database } from './types'
 export async function createClient() {
   const cookieStore = await cookies()
 
+  const cookieOptions = process.env.NODE_ENV === 'production'
+    ? {
+        domain: `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
+        path: '/',
+        sameSite: 'lax' as const,
+        secure: true,
+      }
+    : undefined;
+
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions,
       cookies: {
         getAll() {
           return cookieStore.getAll()

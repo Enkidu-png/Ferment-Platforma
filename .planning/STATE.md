@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-02-PLAN.md (products router migrated to Supabase)
-last_updated: "2026-03-06T16:14:06.262Z"
+stopped_at: Completed 04-04-PLAN.md (checkout router and Stripe webhook migrated to Supabase)
+last_updated: "2026-03-06T16:46:43.446Z"
 last_activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
 progress:
   total_phases: 7
   completed_phases: 3
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 12
   percent: 77
 ---
 
@@ -69,6 +69,7 @@ Progress: [███████░░░] 69%
 
 *Updated after each plan completion*
 | Phase 04-api-layer-migration P02 | 14 | 2 tasks | 3 files |
+| Phase 04 P04 | 5 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -98,6 +99,9 @@ Recent decisions affecting current work:
 - [Phase 04]: RichText (Payload Lexical) replaced with plain div for product content — Supabase stores content as string not SerializedEditorState
 - [Phase 04]: Cast complex PostgREST join results via unknown as ProductRow — Supabase TypeScript client returns GenericStringError for aliased join strings
 - [Phase 04]: getNextPageParam uses hasNextPage/page+1 — Payload nextPage field replaced with explicit boolean in new Supabase response shape
+- [Phase 04]: checkout.verify: use user_tenants join table (not Payload users) — new Supabase users have no Payload record
+- [Phase 04]: Stripe webhook: use supabaseAdmin (service-role) not ctx.supabase — webhook has no auth context; anon client would be blocked by RLS
+- [Phase 04]: orders.insert: no 'name' field — Supabase orders table has no name column
 
 ### Pending Todos
 
@@ -110,6 +114,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T16:14:06.258Z
-Stopped at: Completed 04-02-PLAN.md (products router migrated to Supabase)
+Last session: 2026-03-06T16:46:43.443Z
+Stopped at: Completed 04-04-PLAN.md (checkout router and Stripe webhook migrated to Supabase)
 Resume file: None

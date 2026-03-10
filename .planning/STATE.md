@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 06-03-PLAN.md — adminGetProducts/adminArchiveProduct/adminRestoreProduct procedures, ProductsView, /admin/products page
-last_updated: "2026-03-10T17:56:32.551Z"
+stopped_at: Completed 06-04-PLAN.md — adminGetAllCategories/adminCreateCategory/adminUpdateCategory/adminDeleteCategory procedures, CategoriesView, TagsView, /admin/categories and /admin/tags pages
+last_updated: "2026-03-10T18:04:13.996Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
   completed_phases: 5
   total_plans: 21
-  completed_plans: 19
+  completed_plans: 20
   percent: 100
 ---
 
@@ -77,6 +77,7 @@ Progress: [█████████░] 94%
 | Phase 06-custom-admin-ui P01 | 3 | 2 tasks | 5 files |
 | Phase 06-custom-admin-ui P02 | 4 | 2 tasks | 4 files |
 | Phase 06-custom-admin-ui P03 | 8 | 2 tasks | 3 files |
+| Phase 06-custom-admin-ui P04 | 8 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -126,6 +127,8 @@ Recent decisions affecting current work:
 - [Phase 06-custom-admin-ui]: adminGetTenants: listUsers(perPage:1000) builds email Map once per request — acceptable for small merchant sets, Phase 7 note to switch to per-tenant getUserById if scale grows
 - [Phase 06-custom-admin-ui]: adminGetProducts uses supabaseAdmin not ctx.supabase — admin must see ALL products across ALL tenants including archived; RLS would restrict to admin's own tenant
 - [Phase 06-custom-admin-ui]: tenantName filter applied post-fetch — Supabase JS does not support .ilike() on embedded foreign-table columns in a single query chain; safe at admin scale
+- [Phase 06-custom-admin-ui]: adminDeleteCategory checks product count before delete — returns descriptive error if products use the category (FK guard)
+- [Phase 06-custom-admin-ui]: CategoriesView shows only top-level categories (parent_id = null) — subcategory management deferred to v2
 
 ### Pending Todos
 
@@ -138,6 +141,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:56:32.548Z
-Stopped at: Completed 06-03-PLAN.md — adminGetProducts/adminArchiveProduct/adminRestoreProduct procedures, ProductsView, /admin/products page
+Last session: 2026-03-10T18:04:13.994Z
+Stopped at: Completed 06-04-PLAN.md — adminGetAllCategories/adminCreateCategory/adminUpdateCategory/adminDeleteCategory procedures, CategoriesView, TagsView, /admin/categories and /admin/tags pages
 Resume file: None

@@ -147,7 +147,7 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | 3. Data Migration | 0/2 | Not started | - |
 | 4. API Layer Migration | 5/5 | Complete   | 2026-03-06 |
 | 5. Storage Migration | 3/3 | Complete   | 2026-03-10 |
-| 6. Custom Admin UI | 3/5 | In Progress|  |
+| 6. Custom Admin UI | 4/5 | In Progress|  |
 | 7. Payload Removal + Cutover | 0/TBD | Not started | - |
 
 ---

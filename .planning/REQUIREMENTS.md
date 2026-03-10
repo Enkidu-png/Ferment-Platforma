@@ -54,7 +54,7 @@
 - [x] **ADMN-01**: Custom admin panel at `/admin` route, protected to super-admin users only
 - [x] **ADMN-02**: Admin can view pending merchant applications and approve or reject them
 - [x] **ADMN-03**: Approved merchant shop goes live; rejected merchant receives notification and cannot list products
-- [ ] **ADMN-04**: Admin can view, edit, and delete any product across all merchants
+- [x] **ADMN-04**: Admin can view, edit, and delete any product across all merchants
 - [ ] **ADMN-05**: Admin can create, edit, and delete categories and tags
 - [ ] **ADMN-06**: Admin can view all orders with merchant, product, and buyer details
 
@@ -128,7 +128,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-01 | Phase 6 — Custom Admin UI | Complete |
 | ADMN-02 | Phase 6 — Custom Admin UI | Complete |
 | ADMN-03 | Phase 6 — Custom Admin UI | Complete |
-| ADMN-04 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-04 | Phase 6 — Custom Admin UI | Complete |
 | ADMN-05 | Phase 6 — Custom Admin UI | Pending |
 | ADMN-06 | Phase 6 — Custom Admin UI | Pending |
 | CLEN-01 | Phase 7 — Payload Removal + Cutover | Pending |

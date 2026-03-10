@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 06-02-PLAN.md — adminGetTenants/Approve/Reject/Undo procedures, MerchantReviewCard, MerchantsView, /admin/merchants page
-last_updated: "2026-03-10T17:50:27.508Z"
+stopped_at: Completed 06-03-PLAN.md — adminGetProducts/adminArchiveProduct/adminRestoreProduct procedures, ProductsView, /admin/products page
+last_updated: "2026-03-10T17:56:32.551Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
   completed_phases: 5
   total_plans: 21
-  completed_plans: 18
+  completed_plans: 19
   percent: 100
 ---
 
@@ -76,6 +76,7 @@ Progress: [█████████░] 94%
 | Phase 05-storage-migration P03 | 10 | 2 tasks | 1 files |
 | Phase 06-custom-admin-ui P01 | 3 | 2 tasks | 5 files |
 | Phase 06-custom-admin-ui P02 | 4 | 2 tasks | 4 files |
+| Phase 06-custom-admin-ui P03 | 8 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -123,6 +124,8 @@ Recent decisions affecting current work:
 - [Phase 06-custom-admin-ui]: Cast PostgREST complex join result via unknown as RawTenantRow — Supabase TS client returns GenericStringError for aliased multi-level joins
 - [Phase 06-custom-admin-ui]: ADMN-03 email notification to rejected merchant deferred to Phase 7 — no transactional email service configured; status change IS implemented
 - [Phase 06-custom-admin-ui]: adminGetTenants: listUsers(perPage:1000) builds email Map once per request — acceptable for small merchant sets, Phase 7 note to switch to per-tenant getUserById if scale grows
+- [Phase 06-custom-admin-ui]: adminGetProducts uses supabaseAdmin not ctx.supabase — admin must see ALL products across ALL tenants including archived; RLS would restrict to admin's own tenant
+- [Phase 06-custom-admin-ui]: tenantName filter applied post-fetch — Supabase JS does not support .ilike() on embedded foreign-table columns in a single query chain; safe at admin scale
 
 ### Pending Todos
 
@@ -135,6 +138,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:50:27.506Z
-Stopped at: Completed 06-02-PLAN.md — adminGetTenants/Approve/Reject/Undo procedures, MerchantReviewCard, MerchantsView, /admin/merchants page
+Last session: 2026-03-10T17:56:32.548Z
+Stopped at: Completed 06-03-PLAN.md — adminGetProducts/adminArchiveProduct/adminRestoreProduct procedures, ProductsView, /admin/products page
 Resume file: None

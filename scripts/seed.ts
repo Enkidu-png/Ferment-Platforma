@@ -84,6 +84,74 @@ async function getOrCreateUserTenant(userId: string, tenantId: string): Promise<
   console.log(`  CREATE user_tenants link`)
 }
 
+async function getOrCreateMediaForProduct(
+  tenantId: string,
+  productName: string,
+  picsumId: number,
+  altText: string
+): Promise<void> {
+  // Find product by tenant + name
+  const { data: product } = await supabase
+    .from('products')
+    .select('id, image_id')
+    .eq('tenant_id', tenantId)
+    .eq('name', productName)
+    .maybeSingle()
+
+  if (!product) {
+    console.log(`  SKIP image: product not found — ${productName}`)
+    return
+  }
+
+  // Skip if already has image_id
+  if (product.image_id) {
+    console.log(`  SKIP image: already linked — ${productName}`)
+    return
+  }
+
+  // Download from picsum.photos (deterministic by seed ID, 400x400, JPEG)
+  const imageUrl = `https://picsum.photos/seed/${picsumId}/400/400`
+  const response = await fetch(imageUrl)
+  if (!response.ok) throw new Error(`picsum fetch failed: ${response.status} for seed ${picsumId}`)
+  const buffer = await response.arrayBuffer()
+
+  // Upload to Supabase Storage: {tenantId}/products/{uuid}.jpg
+  // Note: service-role client bypasses RLS — bucket must exist (Plan 01 prerequisite)
+  const filename = `${crypto.randomUUID()}.jpg`
+  const storagePath = `${tenantId}/products/${filename}`
+  const { error: uploadError } = await supabase.storage
+    .from('media')
+    .upload(storagePath, buffer, { contentType: 'image/jpeg', upsert: false })
+  if (uploadError) throw new Error(`Storage upload failed for ${productName}: ${uploadError.message}`)
+
+  // Build public URL via SDK (handles path encoding correctly)
+  const { data: { publicUrl } } = supabase.storage.from('media').getPublicUrl(storagePath)
+
+  // Insert media row
+  const { data: mediaRow, error: insertError } = await supabase
+    .from('media')
+    .insert({
+      storage_path: storagePath,
+      url: publicUrl,
+      alt: altText,
+      mime_type: 'image/jpeg',
+      width: 400,
+      height: 400,
+    })
+    .select('id')
+    .single()
+  if (insertError) throw new Error(`Media insert failed for ${productName}: ${insertError.message}`)
+
+  // Link product to media row via image_id (NOT cover_id — productsRouter uses image_id)
+  const { error: updateError } = await supabase
+    .from('products')
+    .update({ image_id: (mediaRow as { id: string }).id })
+    .eq('id', product.id)
+  if (updateError) throw new Error(`Product image_id update failed for ${productName}: ${updateError.message}`)
+
+  console.log(`  CREATE image: ${altText} -> ${storagePath}`)
+}
+
 // ── Data definitions ────────────────────────────────────────────────────────
 
 // These slugs MUST match the customOrder array in src/modules/categories/server/procedures.ts
@@ -321,6 +389,26 @@ async function seedProducts(
   await getOrCreateProduct(mia.tenantId, 'Zine — Urban Textures Vol. 2', 2500, 'art-prints', 'A5 zine, 32 pages, risograph.')
 }
 
+async function seedImages(
+  artists: Array<{ userId: string; tenantId: string; slug: string }>
+): Promise<void> {
+  console.log('\n[Images]')
+  const [ana, jan, mia] = artists as [typeof artists[0], typeof artists[0], typeof artists[0]]
+
+  // Ceramics by Ana — 3 products get images
+  await getOrCreateMediaForProduct(ana.tenantId, 'Handmade Stoneware Mug', 10, 'Handmade stoneware mug with blue glaze')
+  await getOrCreateMediaForProduct(ana.tenantId, 'Ceramic Salad Bowl', 20, 'Large ceramic salad bowl with speckled finish')
+  await getOrCreateMediaForProduct(ana.tenantId, 'Flower Vase — Tall', 30, 'Tall terracotta vase, matte white glaze')
+
+  // Woodworks Jan — 2 products get images
+  await getOrCreateMediaForProduct(jan.tenantId, 'Oak Serving Board', 40, 'Hand-planed oak cutting and serving board')
+  await getOrCreateMediaForProduct(jan.tenantId, 'Maple Jewelry Box', 50, 'Small maple jewelry box with dovetail joints')
+
+  // Print Studio Mia — 2 products get images
+  await getOrCreateMediaForProduct(mia.tenantId, 'Risograph Print — Forest', 60, 'A3 risograph print, two-colour forest scene')
+  await getOrCreateMediaForProduct(mia.tenantId, 'Photography Print — Gdańsk Dawn', 70, 'Fine art photo print, 50x70cm, signed edition')
+}
+
 // ── Main ────────────────────────────────────────────────────────────────────
 
 async function seed() {
@@ -329,6 +417,7 @@ async function seed() {
   const artists = await seedArtists()
   const categoryMap = await seedCategories()
   await seedProducts(artists, categoryMap)
+  await seedImages(artists)
   console.log('\nSeed complete.')
 }
 

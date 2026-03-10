@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 05-02-PLAN.md (next.config.ts remotePatterns + mediaRouter.createRow tRPC mutation)
-last_updated: "2026-03-10T14:46:54.250Z"
+stopped_at: "Completed 05-03-PLAN.md — awaiting checkpoint:human-verify for storefront image verification"
+last_updated: "2026-03-10T14:50:20.351Z"
 last_activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 16
-  completed_plans: 14
+  completed_plans: 15
   percent: 77
 ---
 
@@ -72,6 +72,7 @@ Progress: [███████░░░] 69%
 | Phase 04 P04 | 5 | 2 tasks | 2 files |
 | Phase 04-api-layer-migration P05 | 5 | 3 tasks | 20 files |
 | Phase 05-storage-migration P02 | 2 | 2 tasks | 3 files |
+| Phase 05-storage-migration P03 | 8 | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -108,6 +109,8 @@ Recent decisions affecting current work:
 - [Phase 04]: Payload npm packages stay in package.json until Phase 7 — only application files deleted in Phase 4
 - [Phase 05-storage-migration]: Use exact Supabase hostname from NEXT_PUBLIC_SUPABASE_URL in remotePatterns (not wildcard *.supabase.co)
 - [Phase 05-storage-migration]: mediaRouter createRow uses ctx.supabase (anon/RLS-enforced), returns only { id } for Phase 6 product linking
+- [Phase 05-storage-migration]: Use product.image_id null check as idempotency guard in seed — avoids querying storage for existing files
+- [Phase 05-storage-migration]: picsum.photos deterministic seed IDs (10,20,30...) for consistent placeholder images across env resets
 
 ### Pending Todos
 
@@ -120,6 +123,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T14:46:54.246Z
-Stopped at: Completed 05-02-PLAN.md (next.config.ts remotePatterns + mediaRouter.createRow tRPC mutation)
+Last session: 2026-03-10T14:50:20.348Z
+Stopped at: Completed 05-03-PLAN.md — awaiting checkpoint:human-verify for storefront image verification
 Resume file: None

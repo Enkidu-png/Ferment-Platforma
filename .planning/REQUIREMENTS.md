@@ -43,9 +43,9 @@
 
 ### Storage
 
-- [ ] **STOR-01**: Supabase Storage bucket created with public-read access policy for product images
-- [ ] **STOR-02**: All files re-uploaded from Vercel Blob to Supabase Storage
-- [ ] **STOR-03**: All media URLs in the database updated to Supabase Storage URLs
+- [x] **STOR-01**: Supabase Storage bucket created with public-read access policy for product images
+- [x] **STOR-02**: All files re-uploaded from Vercel Blob to Supabase Storage
+- [x] **STOR-03**: All media URLs in the database updated to Supabase Storage URLs
 - [x] **STOR-04**: `next.config.js` updated to allow Supabase Storage image domain
 - [x] **STOR-05**: New file uploads use Supabase Storage (upload procedure updated)
 
@@ -120,9 +120,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-05 | Phase 4 — API Layer Migration | Complete |
 | API-06 | Phase 4 — API Layer Migration | Complete |
 | API-07 | Phase 4 — API Layer Migration | Complete |
-| STOR-01 | Phase 5 — Storage Migration | Pending |
-| STOR-02 | Phase 5 — Storage Migration | Pending |
-| STOR-03 | Phase 5 — Storage Migration | Pending |
+| STOR-01 | Phase 5 — Storage Migration | Complete |
+| STOR-02 | Phase 5 — Storage Migration | Complete |
+| STOR-03 | Phase 5 — Storage Migration | Complete |
 | STOR-04 | Phase 5 — Storage Migration | Complete |
 | STOR-05 | Phase 5 — Storage Migration | Complete |
 | ADMN-01 | Phase 6 — Custom Admin UI | Pending |

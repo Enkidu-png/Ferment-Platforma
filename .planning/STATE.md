@@ -2,32 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: "Completed 05-03-PLAN.md — awaiting checkpoint:human-verify for storefront image verification"
-last_updated: "2026-03-10T14:50:20.351Z"
-last_activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
+status: in_progress
+stopped_at: "Completed 05-01-PLAN.md — storage bucket created, RLS migration file written, verify-blob-urls.ts exits 0, smoke tests pass"
+last_updated: "2026-03-10T15:00:00Z"
+last_activity: "2026-03-10 — Plan 05-01 executed (storage bucket + RLS migration + verification tooling)"
 progress:
   total_phases: 7
   completed_phases: 4
   total_plans: 16
-  completed_plans: 15
-  percent: 77
----
-
----
-gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: completed
-stopped_at: Completed 04-01-PLAN.md (categories/tags/tenants routers migrated)
-last_updated: "2026-03-06T16:06:26.990Z"
-last_activity: "2026-03-06 — Phase 4 planned (5 plans: categories/tags/tenants, products, reviews/library, checkout/webhook, Payload removal)"
-progress:
-  [████████░░] 77%
-  completed_phases: 3
-  total_plans: 13
-  completed_plans: 9
-  percent: 69
+  completed_plans: 16
+  percent: 94
 ---
 
 # Project State
@@ -37,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** The marketplace works exactly as before — artists manage their shops, buyers browse and buy — but the backend is Supabase, making the codebase maintainable with AI assistance.
-**Current focus:** Phase 4 — tRPC Procedure Rewrites
+**Current focus:** Phase 5 — Storage Migration
 
 ## Current Position
 
-Phase: 4 of 7 (API Layer Migration) — IN PROGRESS
-Plan: 1 of 5 — complete
-Status: Plan 04-01 complete — categories, tags, tenants routers migrated to Supabase
-Last activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
+Phase: 5 of 7 (Storage Migration) — IN PROGRESS
+Plan: 1 of 3 — complete (05-01 storage infrastructure + verification tooling)
+Status: Plan 05-01 complete — media bucket created, RLS migration written, verify-blob-urls.ts exits 0
+Last activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 
-Progress: [███████░░░] 69%
+Progress: [█████████░] 94%
 
 ## Performance Metrics
 
@@ -111,6 +95,9 @@ Recent decisions affecting current work:
 - [Phase 05-storage-migration]: mediaRouter createRow uses ctx.supabase (anon/RLS-enforced), returns only { id } for Phase 6 product linking
 - [Phase 05-storage-migration]: Use product.image_id null check as idempotency guard in seed — avoids querying storage for existing files
 - [Phase 05-storage-migration]: picsum.photos deterministic seed IDs (10,20,30...) for consistent placeholder images across env resets
+- [05-01]: media bucket created via Storage REST API (supabase CLI not linked — no management API token); RLS policies in migration file require manual SQL execution via dashboard
+- [05-01]: verify-blob-urls.ts confirms STOR-02/STOR-03 satisfied as no-op (no Vercel Blob URLs existed in DB)
+- [05-01]: storage.spec.ts stub tests pass pre-seed — broken image assertion validates current state correctly
 
 ### Pending Todos
 
@@ -123,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T14:50:20.348Z
-Stopped at: Completed 05-03-PLAN.md — awaiting checkpoint:human-verify for storefront image verification
+Last session: 2026-03-10T15:00:00Z
+Stopped at: Completed 05-01-PLAN.md — storage bucket created, RLS migration written, verify-blob-urls.ts exits 0
 Resume file: None

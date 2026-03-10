@@ -44,6 +44,18 @@ A protected `/admin` route where a super-admin manages the marketplace. Covers: 
 
 </decisions>
 
+<claudes_discretion>
+## Claude's Discretion
+
+### Admin sidebar: plain nav instead of full shadcn Sidebar primitives
+The locked decision says "reuse existing sidebar.tsx component". After examining `src/components/ui/sidebar.tsx`, it is a complex composition of SidebarProvider, SidebarInset, SidebarTrigger, collapsible state, and cookie persistence — designed for application sidebars with drawer behavior on mobile. Wrapping this for a simple 5-link admin nav would add unnecessary complexity and coupling.
+
+**Decision:** `admin-sidebar-nav.tsx` is implemented as a plain `<nav>` using Next.js `Link` and shadcn `Button` (ghost) styling. It achieves the same visual outcome (sidebar with content area layout, matching storefront theme) without the overhead of the full Sidebar primitive stack. The intent of the locked decision (sidebar-style layout, same visual theme) is honored; the specific primitive composition is not.
+
+If the user later wants the collapsible/drawer behavior from the full shadcn Sidebar, the component can be refactored without touching any other plan.
+
+</claudes_discretion>
+
 <specifics>
 ## Specific Ideas
 
@@ -100,3 +112,4 @@ A protected `/admin` route where a super-admin manages the marketplace. Covers: 
 *Phase: 06-custom-admin-ui*
 *Context gathered: 2026-03-10*
 *Revised: 2026-03-10 — corrected auth redirect path to /sign-in (confirmed from codebase); deferred ADMN-03 notification fragment*
+*Revised: 2026-03-10 — added Claude's Discretion section documenting plain nav instead of full shadcn Sidebar primitives (checker issue 06-01)*

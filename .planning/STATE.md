@@ -3,11 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
+stopped_at: Completed 05-03-PLAN.md — seed images uploaded, human verification approved, Phase 5 storage migration complete
+last_updated: "2026-03-10T16:16:16.352Z"
+last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
+progress:
+  total_phases: 7
+  completed_phases: 5
+  total_plans: 16
+  completed_plans: 16
+  percent: 100
+---
+
+---
+gsd_state_version: 1.0
+milestone: v1.0
+milestone_name: milestone
+status: in_progress
 stopped_at: "Completed 05-01-PLAN.md — storage bucket created, RLS migration file written, verify-blob-urls.ts exits 0, smoke tests pass"
 last_updated: "2026-03-10T15:00:00Z"
 last_activity: "2026-03-10 — Plan 05-01 executed (storage bucket + RLS migration + verification tooling)"
 progress:
-  total_phases: 7
+  [██████████] 100%
   completed_phases: 4
   total_plans: 16
   completed_plans: 16
@@ -57,6 +73,7 @@ Progress: [█████████░] 94%
 | Phase 04-api-layer-migration P05 | 5 | 3 tasks | 20 files |
 | Phase 05-storage-migration P02 | 2 | 2 tasks | 3 files |
 | Phase 05-storage-migration P03 | 8 | 1 tasks | 3 files |
+| Phase 05-storage-migration P03 | 10 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -98,6 +115,7 @@ Recent decisions affecting current work:
 - [05-01]: media bucket created via Storage REST API (supabase CLI not linked — no management API token); RLS policies in migration file require manual SQL execution via dashboard
 - [05-01]: verify-blob-urls.ts confirms STOR-02/STOR-03 satisfied as no-op (no Vercel Blob URLs existed in DB)
 - [05-01]: storage.spec.ts stub tests pass pre-seed — broken image assertion validates current state correctly
+- [Phase 05-storage-migration]: Human verification confirmed: ceramics-by-ana product cards load real images from Supabase Storage URLs (no blob.vercel-storage.com requests)
 
 ### Pending Todos
 
@@ -110,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T15:00:00Z
-Stopped at: Completed 05-01-PLAN.md — storage bucket created, RLS migration written, verify-blob-urls.ts exits 0
+Last session: 2026-03-10T16:16:16.349Z
+Stopped at: Completed 05-03-PLAN.md — seed images uploaded, human verification approved, Phase 5 storage migration complete
 Resume file: None

@@ -59,7 +59,7 @@ completed: 2026-03-10
 - **Duration:** 8 min
 - **Started:** 2026-03-10T14:44:29Z
 - **Completed:** 2026-03-10T14:52:00Z
-- **Tasks:** 1 (+ prerequisite fixes)
+- **Tasks:** 2 (1 auto + 1 human-verify, plus prerequisite fixes)
 - **Files modified:** 3 (scripts/seed.ts, scripts/verify-blob-urls.ts [new], tests/smoke/storage.spec.ts [new])
 
 ## Accomplishments
@@ -118,7 +118,7 @@ None - no external service configuration required. Images uploaded automatically
 - `verify-blob-urls.ts` passes: no Vercel Blob URLs in database
 - Storefront ready for human verification: ceramics-by-ana product cards should render real images
 - Phase 6 (custom admin UI) can develop with realistic product catalog containing actual product images
-- Checkpoint awaiting: human verification that product images load correctly in browser
+- Human verification complete: ceramics-by-ana storefront product cards confirmed to render images from Supabase Storage URLs with no blob.vercel-storage.com requests
 
 ---
 *Phase: 05-storage-migration*

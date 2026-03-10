@@ -51,7 +51,7 @@
 
 ### Admin UI
 
-- [ ] **ADMN-01**: Custom admin panel at `/admin` route, protected to super-admin users only
+- [x] **ADMN-01**: Custom admin panel at `/admin` route, protected to super-admin users only
 - [ ] **ADMN-02**: Admin can view pending merchant applications and approve or reject them
 - [ ] **ADMN-03**: Approved merchant shop goes live; rejected merchant receives notification and cannot list products
 - [ ] **ADMN-04**: Admin can view, edit, and delete any product across all merchants
@@ -125,7 +125,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | STOR-03 | Phase 5 — Storage Migration | Complete |
 | STOR-04 | Phase 5 — Storage Migration | Complete |
 | STOR-05 | Phase 5 — Storage Migration | Complete |
-| ADMN-01 | Phase 6 — Custom Admin UI | Pending |
+| ADMN-01 | Phase 6 — Custom Admin UI | Complete |
 | ADMN-02 | Phase 6 — Custom Admin UI | Pending |
 | ADMN-03 | Phase 6 — Custom Admin UI | Pending |
 | ADMN-04 | Phase 6 — Custom Admin UI | Pending |

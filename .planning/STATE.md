@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Phase 6 context gathered
-last_updated: "2026-03-10T16:56:02.368Z"
+stopped_at: Completed 06-01-PLAN.md — adminProcedure, admin layout guard, sidebar nav, Playwright stubs
+last_updated: "2026-03-10T17:42:01.631Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
   completed_phases: 5
-  total_plans: 16
-  completed_plans: 16
+  total_plans: 21
+  completed_plans: 17
   percent: 100
 ---
 
@@ -74,6 +74,7 @@ Progress: [█████████░] 94%
 | Phase 05-storage-migration P02 | 2 | 2 tasks | 3 files |
 | Phase 05-storage-migration P03 | 8 | 1 tasks | 3 files |
 | Phase 05-storage-migration P03 | 10 | 2 tasks | 1 files |
+| Phase 06-custom-admin-ui P01 | 3 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,8 @@ Recent decisions affecting current work:
 - [05-01]: verify-blob-urls.ts confirms STOR-02/STOR-03 satisfied as no-op (no Vercel Blob URLs existed in DB)
 - [05-01]: storage.spec.ts stub tests pass pre-seed — broken image assertion validates current state correctly
 - [Phase 05-storage-migration]: Human verification confirmed: ceramics-by-ana product cards load real images from Supabase Storage URLs (no blob.vercel-storage.com requests)
+- [Phase 06-custom-admin-ui]: adminProcedure reads app_role from JWT claims (app_metadata) — no DB query needed, hook embedded role in Phase 3
+- [Phase 06-custom-admin-ui]: C:/Program Files/Git/admin page redirects to /admin/merchants as default landing (locked decision)
 
 ### Pending Todos
 
@@ -128,6 +131,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T16:56:02.365Z
-Stopped at: Phase 6 context gathered
-Resume file: .planning/phases/06-custom-admin-ui/06-CONTEXT.md
+Last session: 2026-03-10T17:42:01.628Z
+Stopped at: Completed 06-01-PLAN.md — adminProcedure, admin layout guard, sidebar nav, Playwright stubs
+Resume file: None

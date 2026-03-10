@@ -27,3 +27,16 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   }
   return next({ ctx: { ...ctx, user: ctx.user } });
 });
+
+export const adminProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.user) {
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Not authenticated' });
+  }
+  // app_role is embedded by custom_access_token_hook into user.app_metadata
+  // The hook's coalesce fix (Phase 3) ensures app_role is present for seeded admin
+  const appRole = ctx.user.app_metadata?.app_role;
+  if (appRole !== 'super-admin') {
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Super-admin access required' });
+  }
+  return next({ ctx: { ...ctx, user: ctx.user } });
+});

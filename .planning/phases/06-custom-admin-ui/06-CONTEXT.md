@@ -17,7 +17,7 @@ A protected `/admin` route where a super-admin manages the marketplace. Covers: 
 - Sidebar + content area layout (reuse existing `sidebar.tsx` component)
 - Default landing: Merchants section (most action-critical for marketplace health)
 - Same visual theme as storefront (no separate dark/admin theme — keep it simple)
-- Access control: unauthenticated users redirected to `/auth/login`; authenticated non-admins get 403 or redirect to home
+- Access control: unauthenticated users redirected to `/sign-in` (actual route: `src/app/(app)/(auth)/sign-in/page.tsx`); authenticated non-admins get 403 or redirect to home
 - Sidebar links: Merchants, Products, Categories, Tags, Orders
 
 ### Merchant approval flow
@@ -91,6 +91,7 @@ A protected `/admin` route where a super-admin manages the marketplace. Covers: 
 - Product-level approval (each product approved before going live) — explicitly in v2 requirements (ADMN-V2-01)
 - Artist analytics dashboard — v2 (ADMN-V2-02)
 - Multi-level undo history for merchant decisions — single-level undo is sufficient for v1
+- **ADMN-03 notification fragment**: Rejected merchant email notification deferred to Phase 7 alongside AUTH-05 (transactional email setup). No email service (Resend, SendGrid, etc.) is configured in Phase 6. The status-change part of ADMN-03 (tenant.status = 'rejected') IS implemented in Phase 6.
 
 </deferred>
 
@@ -98,3 +99,4 @@ A protected `/admin` route where a super-admin manages the marketplace. Covers: 
 
 *Phase: 06-custom-admin-ui*
 *Context gathered: 2026-03-10*
+*Revised: 2026-03-10 — corrected auth redirect path to /sign-in (confirmed from codebase); deferred ADMN-03 notification fragment*

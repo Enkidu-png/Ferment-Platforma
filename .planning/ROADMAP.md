@@ -110,7 +110,13 @@ Plans:
   3. A super-admin can edit a product from any merchant and the change is reflected on the storefront
   4. A super-admin can create, rename, and delete a category and the change is reflected in the buyer-facing category filter
   5. A super-admin can view all orders with merchant, product, and buyer information displayed
-**Plans**: TBD
+**Plans**: 5 plans
+Plans:
+- [ ] 06-01-PLAN.md — Test scaffold + adminProcedure + admin layout/routing
+- [ ] 06-02-PLAN.md — Merchants procedures + Tinder review UI
+- [ ] 06-03-PLAN.md — Products procedures + archive/restore UI
+- [ ] 06-04-PLAN.md — Categories + Tags procedures + CRUD UI
+- [ ] 06-05-PLAN.md — Orders procedure + router wiring + human verification
 
 ### Phase 7: Payload Removal + Cutover
 **Goal**: Payload CMS is fully removed from the codebase, existing artists have received password reset emails, and the application is live on Supabase with no Payload code or MongoDB connection remaining
@@ -121,7 +127,13 @@ Plans:
   2. A search of the entire `src/` directory for `payloadcms` and `payload.config` returns zero matches
   3. All existing artists have received a password reset email and can log into the Supabase-backed platform
   4. The production application serves the marketplace correctly — storefronts load, checkout works, images display — with no Payload or MongoDB in the dependency tree
-**Plans**: TBD
+**Plans**: 5 plans
+Plans:
+- [ ] 06-01-PLAN.md — Test scaffold + adminProcedure + admin layout/routing
+- [ ] 06-02-PLAN.md — Merchants procedures + Tinder review UI
+- [ ] 06-03-PLAN.md — Products procedures + archive/restore UI
+- [ ] 06-04-PLAN.md — Categories + Tags procedures + CRUD UI
+- [ ] 06-05-PLAN.md — Orders procedure + router wiring + human verification
 
 ## Progress
 
@@ -135,9 +147,9 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | 3. Data Migration | 0/2 | Not started | - |
 | 4. API Layer Migration | 5/5 | Complete   | 2026-03-06 |
 | 5. Storage Migration | 3/3 | Complete   | 2026-03-10 |
-| 6. Custom Admin UI | 0/TBD | Not started | - |
+| 6. Custom Admin UI | 0/5 | Not started | - |
 | 7. Payload Removal + Cutover | 0/TBD | Not started | - |
 
 ---
 *Roadmap created: 2026-02-24*
-*Last updated: 2026-03-10 — Phase 5 plans written (3 plans: bucket/RLS/tests, next.config+mediaRouter, seed image extension)*
+*Last updated: 2026-03-10 — Phase 6 plans written (5 plans: foundation+test-scaffold, merchants, products, categories+tags, orders+wiring)*

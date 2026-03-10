@@ -2,10 +2,26 @@ import z from "zod";
 import { TRPCError } from "@trpc/server";
 import type { Tables } from "@/lib/supabase/types";
 
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { adminProcedure, baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 type TenantWithImage = Tables<"tenants"> & {
   image: Tables<"media"> | null;
+};
+
+type AdminTenantRow = {
+  id: string;
+  name: string;
+  slug: string;
+  status: string;
+  created_at: string;
+  description: string | null;
+  email: string | null;
+  products: Array<{
+    id: string;
+    name: string;
+    image: { id: string; url: string } | null;
+  }>;
 };
 
 export const tenantsRouter = createTRPCRouter({
@@ -29,5 +45,100 @@ export const tenantsRouter = createTRPCRouter({
       }
 
       return tenant as unknown as TenantWithImage;
+    }),
+
+  adminGetTenants: adminProcedure
+    .input(z.object({ status: z.enum(["pending", "active", "rejected"]) }))
+    .query(async ({ input }) => {
+      // Step 1: Fetch tenants with their products and the user_tenants junction row
+      type RawTenantRow = {
+        id: string;
+        name: string;
+        slug: string;
+        status: string;
+        created_at: string;
+        description: string | null;
+        user_tenants: Array<{ user_id: string }>;
+        products: Array<{
+          id: string;
+          name: string;
+          image: { id: string; url: string } | null;
+        }>;
+      };
+
+      const { data, error } = await supabaseAdmin
+        .from("tenants")
+        .select(
+          "id, name, slug, status, created_at, description, " +
+          "user_tenants(user_id), " +
+          "products:products!tenant_id(id, name, image:media!image_id(id, url))"
+        )
+        .eq("status", input.status)
+        .order("created_at", { ascending: false });
+      if (error) throw new Error(error.message);
+
+      const tenants = (data ?? []) as unknown as RawTenantRow[];
+      if (tenants.length === 0) return [] as AdminTenantRow[];
+
+      // Step 2: Collect all user_ids, then fetch emails in one listUsers call
+      // listUsers returns up to 1000 users by default — sufficient for admin dataset
+      const { data: usersPage } = await supabaseAdmin.auth.admin.listUsers({
+        perPage: 1000,
+      });
+      const emailMap = new Map<string, string>();
+      for (const u of usersPage?.users ?? []) {
+        emailMap.set(u.id, u.email ?? "");
+      }
+
+      // Step 3: Merge email into each tenant row
+      return tenants.map((t) => {
+        const userId = t.user_tenants[0]?.user_id;
+        return {
+          id: t.id,
+          name: t.name,
+          slug: t.slug,
+          status: t.status,
+          created_at: t.created_at,
+          description: t.description ?? null,
+          email: userId ? (emailMap.get(userId) ?? null) : null,
+          products: t.products,
+        } satisfies AdminTenantRow;
+      });
+    }),
+
+  adminApproveTenant: adminProcedure
+    .input(z.object({ tenantId: z.string() }))
+    .mutation(async ({ input }) => {
+      const { error } = await supabaseAdmin
+        .from("tenants")
+        .update({ status: "active" })
+        .eq("id", input.tenantId);
+      if (error) throw new Error(error.message);
+      return { success: true };
+    }),
+
+  adminRejectTenant: adminProcedure
+    .input(z.object({ tenantId: z.string() }))
+    .mutation(async ({ input }) => {
+      const { error } = await supabaseAdmin
+        .from("tenants")
+        .update({ status: "rejected" })
+        .eq("id", input.tenantId);
+      if (error) throw new Error(error.message);
+      return { success: true };
+      // Note: Email notification for rejected merchants is deferred to Phase 7
+      // alongside AUTH-05 (transactional email setup). Status change is the
+      // implemented part of ADMN-03 for Phase 6.
+    }),
+
+  adminUndoTenantDecision: adminProcedure
+    .input(z.object({ tenantId: z.string() }))
+    .mutation(async ({ input }) => {
+      const { error } = await supabaseAdmin
+        .from("tenants")
+        .update({ status: "pending" })
+        .eq("id", input.tenantId);
+      if (error) throw new Error(error.message);
+      return { success: true };
     }),
 });

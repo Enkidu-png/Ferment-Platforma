@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 3: Data Migration** - All 8 MongoDB collections exported, ID-remapped, and imported into Supabase PostgreSQL
 - [x] **Phase 4: API Layer Migration** - All 8 tRPC routers rewritten to use Supabase client; Stripe webhook updated (completed 2026-03-06)
 - [x] **Phase 5: Storage Migration** - All Vercel Blob files moved to Supabase Storage; all URLs updated across database (completed 2026-03-10)
-- [ ] **Phase 6: Custom Admin UI** - `/admin` route built with full merchant, product, category, and order management
+- [x] **Phase 6: Custom Admin UI** - `/admin` route built with full merchant, product, category, and order management (completed 2026-03-10)
 - [ ] **Phase 7: Payload Removal + Cutover** - Payload CMS fully removed; password resets sent; production go-live
 
 ## Phase Details
@@ -147,7 +147,7 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | 3. Data Migration | 0/2 | Not started | - |
 | 4. API Layer Migration | 5/5 | Complete   | 2026-03-06 |
 | 5. Storage Migration | 3/3 | Complete   | 2026-03-10 |
-| 6. Custom Admin UI | 4/5 | In Progress|  |
+| 6. Custom Admin UI | 5/5 | Complete   | 2026-03-10 |
 | 7. Payload Removal + Cutover | 0/TBD | Not started | - |
 
 ---

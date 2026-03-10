@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 06-01-PLAN.md — adminProcedure, admin layout guard, sidebar nav, Playwright stubs
-last_updated: "2026-03-10T17:42:01.631Z"
+stopped_at: Completed 06-02-PLAN.md — adminGetTenants/Approve/Reject/Undo procedures, MerchantReviewCard, MerchantsView, /admin/merchants page
+last_updated: "2026-03-10T17:50:27.508Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
   completed_phases: 5
   total_plans: 21
-  completed_plans: 17
+  completed_plans: 18
   percent: 100
 ---
 
@@ -75,6 +75,7 @@ Progress: [█████████░] 94%
 | Phase 05-storage-migration P03 | 8 | 1 tasks | 3 files |
 | Phase 05-storage-migration P03 | 10 | 2 tasks | 1 files |
 | Phase 06-custom-admin-ui P01 | 3 | 2 tasks | 5 files |
+| Phase 06-custom-admin-ui P02 | 4 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -119,6 +120,9 @@ Recent decisions affecting current work:
 - [Phase 05-storage-migration]: Human verification confirmed: ceramics-by-ana product cards load real images from Supabase Storage URLs (no blob.vercel-storage.com requests)
 - [Phase 06-custom-admin-ui]: adminProcedure reads app_role from JWT claims (app_metadata) — no DB query needed, hook embedded role in Phase 3
 - [Phase 06-custom-admin-ui]: C:/Program Files/Git/admin page redirects to /admin/merchants as default landing (locked decision)
+- [Phase 06-custom-admin-ui]: Cast PostgREST complex join result via unknown as RawTenantRow — Supabase TS client returns GenericStringError for aliased multi-level joins
+- [Phase 06-custom-admin-ui]: ADMN-03 email notification to rejected merchant deferred to Phase 7 — no transactional email service configured; status change IS implemented
+- [Phase 06-custom-admin-ui]: adminGetTenants: listUsers(perPage:1000) builds email Map once per request — acceptable for small merchant sets, Phase 7 note to switch to per-tenant getUserById if scale grows
 
 ### Pending Todos
 
@@ -131,6 +135,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-10T17:42:01.628Z
-Stopped at: Completed 06-01-PLAN.md — adminProcedure, admin layout guard, sidebar nav, Playwright stubs
+Last session: 2026-03-10T17:50:27.506Z
+Stopped at: Completed 06-02-PLAN.md — adminGetTenants/Approve/Reject/Undo procedures, MerchantReviewCard, MerchantsView, /admin/merchants page
 Resume file: None

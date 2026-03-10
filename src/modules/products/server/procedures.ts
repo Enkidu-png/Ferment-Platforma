@@ -3,13 +3,22 @@ import { TRPCError } from "@trpc/server";
 import type { Tables } from "@/lib/supabase/types";
 
 import { DEFAULT_LIMIT } from "@/constants";
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { adminProcedure, baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 import { sortValues } from "../search-params";
 
 type Media = Tables<"media">;
 type Tenant = Tables<"tenants"> & { image: Media | null };
 type Category = Tables<"categories">;
+
+type AdminProductRow = {
+  id: string;
+  name: string;
+  is_archived: boolean;
+  created_at: string;
+  tenant: { id: string; name: string; slug: string } | null;
+};
 
 type ProductRow = Tables<"products"> & {
   image: Media | null;
@@ -263,5 +272,63 @@ export const productsRouter = createTRPCRouter({
         hasNextPage: input.cursor * input.limit < totalDocs,
         hasPrevPage: input.cursor > 1,
       };
+    }),
+
+  adminGetProducts: adminProcedure
+    .input(z.object({
+      search: z.string().optional(),
+      tenantName: z.string().optional(),
+    }))
+    .query(async ({ input }) => {
+      let query = supabaseAdmin
+        .from("products")
+        .select(
+          "id, name, is_archived, created_at, " +
+          "tenant:tenants!tenant_id(id, name, slug)"
+        )
+        .order("created_at", { ascending: false });
+
+      if (input.search && input.search.trim() !== "") {
+        query = query.ilike("name", `%${input.search.trim()}%`);
+      }
+
+      const { data, error } = await query;
+      if (error) throw new Error(error.message);
+
+      let rows = (data ?? []) as unknown as AdminProductRow[];
+
+      // Filter by merchant name client-side after fetch.
+      // Supabase does not support .ilike() on embedded foreign-table columns
+      // in the same query chain; post-fetch filter is safe at admin scale.
+      if (input.tenantName && input.tenantName.trim() !== "") {
+        const needle = input.tenantName.trim().toLowerCase();
+        rows = rows.filter((p) =>
+          p.tenant?.name?.toLowerCase().includes(needle)
+        );
+      }
+
+      return rows;
+    }),
+
+  adminArchiveProduct: adminProcedure
+    .input(z.object({ productId: z.string() }))
+    .mutation(async ({ input }) => {
+      const { error } = await supabaseAdmin
+        .from("products")
+        .update({ is_archived: true })
+        .eq("id", input.productId);
+      if (error) throw new Error(error.message);
+      return { success: true };
+    }),
+
+  adminRestoreProduct: adminProcedure
+    .input(z.object({ productId: z.string() }))
+    .mutation(async ({ input }) => {
+      const { error } = await supabaseAdmin
+        .from("products")
+        .update({ is_archived: false })
+        .eq("id", input.productId);
+      if (error) throw new Error(error.message);
+      return { success: true };
     }),
 });

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: "Completed 04-05-PLAN.md (Payload removal: ctx.db removed, all Payload files deleted, RLS isolation test passes)"
-last_updated: "2026-03-06T17:03:07.882Z"
+stopped_at: Completed 05-02-PLAN.md (next.config.ts remotePatterns + mediaRouter.createRow tRPC mutation)
+last_updated: "2026-03-10T14:46:54.250Z"
 last_activity: 2026-03-06 — Plan 04-01 executed (categories/tags/tenants routers migrated; tags-filter.tsx consumer fixed)
 progress:
   total_phases: 7
   completed_phases: 4
-  total_plans: 13
-  completed_plans: 13
+  total_plans: 16
+  completed_plans: 14
   percent: 77
 ---
 
@@ -71,6 +71,7 @@ Progress: [███████░░░] 69%
 | Phase 04-api-layer-migration P02 | 14 | 2 tasks | 3 files |
 | Phase 04 P04 | 5 | 2 tasks | 2 files |
 | Phase 04-api-layer-migration P05 | 5 | 3 tasks | 20 files |
+| Phase 05-storage-migration P02 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,8 @@ Recent decisions affecting current work:
 - [Phase 04]: orders.insert: no 'name' field — Supabase orders table has no name column
 - [Phase 04]: src/seed.ts (legacy Payload seed) deleted — active seed is scripts/seed.ts (Supabase-based from Phase 3)
 - [Phase 04]: Payload npm packages stay in package.json until Phase 7 — only application files deleted in Phase 4
+- [Phase 05-storage-migration]: Use exact Supabase hostname from NEXT_PUBLIC_SUPABASE_URL in remotePatterns (not wildcard *.supabase.co)
+- [Phase 05-storage-migration]: mediaRouter createRow uses ctx.supabase (anon/RLS-enforced), returns only { id } for Phase 6 product linking
 
 ### Pending Todos
 
@@ -117,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T16:54:41.781Z
-Stopped at: Completed 04-05-PLAN.md (Payload removal: ctx.db removed, all Payload files deleted, RLS isolation test passes)
+Last session: 2026-03-10T14:46:54.246Z
+Stopped at: Completed 05-02-PLAN.md (next.config.ts remotePatterns + mediaRouter.createRow tRPC mutation)
 Resume file: None

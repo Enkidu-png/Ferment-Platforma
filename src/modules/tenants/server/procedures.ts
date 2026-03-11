@@ -15,7 +15,6 @@ type AdminTenantRow = {
   slug: string;
   status: string;
   created_at: string;
-  description: string | null;
   email: string | null;
   products: Array<{
     id: string;

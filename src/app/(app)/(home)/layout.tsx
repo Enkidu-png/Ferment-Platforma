@@ -7,6 +7,9 @@ import { Navbar } from "@/modules/home/ui/components/navbar";
 import { Footer } from "@/modules/home/ui/components/footer";
 import { SearchFilters, SearchFiltersSkeleton } from "@/modules/home/ui/components/search-filters";
 
+// Layout uses cookies() via createTRPCContext → @supabase/ssr, so it must be dynamic.
+export const dynamic = "force-dynamic";
+
 interface Props {
   children: React.ReactNode;
 };

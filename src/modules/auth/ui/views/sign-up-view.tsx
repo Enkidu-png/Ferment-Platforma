@@ -4,7 +4,6 @@ import z from "zod";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "@/lib/utils";
@@ -24,8 +23,6 @@ import {
 import { registerSchema } from "../../schemas";
 
 export const SignUpView = () => {
-  const router = useRouter();
-
   const [authError, setAuthError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [confirmationSent, setConfirmationSent] = useState(false);
@@ -44,7 +41,7 @@ export const SignUpView = () => {
     setAuthError(null);
     setIsPending(true);
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
       options: {
@@ -56,7 +53,6 @@ export const SignUpView = () => {
       setAuthError(error.message);
       return;
     }
-    void data;
     setConfirmationSent(true);
   };
 

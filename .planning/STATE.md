@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Phase 7 context gathered
-last_updated: "2026-03-11T15:23:40.221Z"
+stopped_at: Completed 07-01-PLAN.md — Payload packages removed, source files deleted, build passes with zero errors
+last_updated: "2026-03-11T16:18:14.880Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
   completed_phases: 6
-  total_plans: 21
-  completed_plans: 21
+  total_plans: 24
+  completed_plans: 22
   percent: 100
 ---
 
@@ -79,6 +79,7 @@ Progress: [█████████░] 94%
 | Phase 06-custom-admin-ui P03 | 8 | 2 tasks | 3 files |
 | Phase 06-custom-admin-ui P04 | 8 | 2 tasks | 6 files |
 | Phase 06-custom-admin-ui P05 | 6 | 1 tasks | 4 files |
+| Phase 07-payload-removal-+-cutover P01 | 22 | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -132,6 +133,9 @@ Recent decisions affecting current work:
 - [Phase 06-custom-admin-ui]: CategoriesView shows only top-level categories (parent_id = null) — subcategory management deferred to v2
 - [Phase 06-custom-admin-ui]: ordersRouter uses supabaseAdmin (service-role) for cross-tenant access — orders RLS is user-scoped, admin needs all orders
 - [Phase 06-custom-admin-ui]: Buyer identified by username from public.users — no N+1 email lookups; satisfies ADMN-06 buyer information requirement
+- [Phase 07-payload-removal-+-cutover]: npm install used instead of bun install — bun v1.3.4 on Windows/OneDrive creates empty node_modules dirs; npm correctly populates all packages
+- [Phase 07-payload-removal-+-cutover]: force-dynamic added to (home) layout — layout calls createTRPCContext which reads cookies() making all child pages dynamic; required for Next.js 15 build to pass
+- [Phase 07-payload-removal-+-cutover]: db:seed fixed to scripts/seed.ts — src/seed.ts was deleted in Phase 4; db:types added as placeholder for supabase gen types command
 
 ### Pending Todos
 
@@ -144,6 +148,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T15:23:40.216Z
-Stopped at: Phase 7 context gathered
-Resume file: .planning/phases/07-payload-removal-+-cutover/07-CONTEXT.md
+Last session: 2026-03-11T16:18:14.877Z
+Stopped at: Completed 07-01-PLAN.md — Payload packages removed, source files deleted, build passes with zero errors
+Resume file: None

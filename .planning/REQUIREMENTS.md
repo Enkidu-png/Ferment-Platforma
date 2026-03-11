@@ -60,10 +60,10 @@
 
 ### Cleanup
 
-- [ ] **CLEN-01**: All Payload CMS packages removed from `package.json`
-- [ ] **CLEN-02**: Payload configuration and collection files removed (`payload.config.ts`, `src/collections/`, generated types)
-- [ ] **CLEN-03**: MongoDB connection removed
-- [ ] **CLEN-04**: Vercel Blob dependency removed (replaced by Supabase Storage)
+- [x] **CLEN-01**: All Payload CMS packages removed from `package.json`
+- [x] **CLEN-02**: Payload configuration and collection files removed (`payload.config.ts`, `src/collections/`, generated types)
+- [x] **CLEN-03**: MongoDB connection removed
+- [x] **CLEN-04**: Vercel Blob dependency removed (replaced by Supabase Storage)
 - [ ] **CLEN-05**: App builds and runs successfully with zero Payload references in codebase
 
 ## v2 Requirements
@@ -131,10 +131,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ADMN-04 | Phase 6 — Custom Admin UI | Complete |
 | ADMN-05 | Phase 6 — Custom Admin UI | Complete |
 | ADMN-06 | Phase 6 — Custom Admin UI | Complete |
-| CLEN-01 | Phase 7 — Payload Removal + Cutover | Pending |
-| CLEN-02 | Phase 7 — Payload Removal + Cutover | Pending |
-| CLEN-03 | Phase 7 — Payload Removal + Cutover | Pending |
-| CLEN-04 | Phase 7 — Payload Removal + Cutover | Pending |
+| CLEN-01 | Phase 7 — Payload Removal + Cutover | Complete |
+| CLEN-02 | Phase 7 — Payload Removal + Cutover | Complete |
+| CLEN-03 | Phase 7 — Payload Removal + Cutover | Complete |
+| CLEN-04 | Phase 7 — Payload Removal + Cutover | Complete |
 | CLEN-05 | Phase 7 — Payload Removal + Cutover | Pending |
 
 **Coverage:**

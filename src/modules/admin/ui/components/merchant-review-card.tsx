@@ -16,7 +16,6 @@ export type AdminTenantRow = {
   slug: string;
   status: string;
   created_at: string;
-  description: string | null;
   email: string | null;
   products: Array<{
     id: string;
@@ -79,12 +78,6 @@ export function MerchantReviewCard({
         {/* Merchant info */}
         <div className="space-y-2">
           <h2 className="text-xl font-semibold">{tenant.name}</h2>
-
-          {tenant.description && (
-            <p className="text-sm text-muted-foreground line-clamp-3">
-              {tenant.description}
-            </p>
-          )}
 
           <a
             href={`/${tenant.slug}`}

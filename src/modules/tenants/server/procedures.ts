@@ -48,7 +48,7 @@ export const tenantsRouter = createTRPCRouter({
     }),
 
   adminGetTenants: adminProcedure
-    .input(z.object({ status: z.enum(["pending", "active", "rejected"]) }))
+    .input(z.object({ status: z.enum(["pending", "approved", "rejected", "suspended"]) }))
     .query(async ({ input }) => {
       // Step 1: Fetch tenants with their products and the user_tenants junction row
       type RawTenantRow = {
@@ -57,7 +57,6 @@ export const tenantsRouter = createTRPCRouter({
         slug: string;
         status: string;
         created_at: string;
-        description: string | null;
         user_tenants: Array<{ user_id: string }>;
         products: Array<{
           id: string;
@@ -69,7 +68,7 @@ export const tenantsRouter = createTRPCRouter({
       const { data, error } = await supabaseAdmin
         .from("tenants")
         .select(
-          "id, name, slug, status, created_at, description, " +
+          "id, name, slug, status, created_at, " +
           "user_tenants(user_id), " +
           "products:products!tenant_id(id, name, image:media!image_id(id, url))"
         )
@@ -99,7 +98,6 @@ export const tenantsRouter = createTRPCRouter({
           slug: t.slug,
           status: t.status,
           created_at: t.created_at,
-          description: t.description ?? null,
           email: userId ? (emailMap.get(userId) ?? null) : null,
           products: t.products,
         } satisfies AdminTenantRow;
@@ -111,7 +109,7 @@ export const tenantsRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { error } = await supabaseAdmin
         .from("tenants")
-        .update({ status: "active" })
+        .update({ status: "approved" })
         .eq("id", input.tenantId);
       if (error) throw new Error(error.message);
       return { success: true };

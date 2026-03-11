@@ -269,6 +269,12 @@ async function seedAdmin(): Promise<string> {
     process.env.SEED_ADMIN_PASSWORD!
   )
   await getOrCreatePublicUser(authId, 'admin', 'super-admin')
+  // Always ensure app_metadata.app_role is set — required by adminProcedure JWT check
+  const { error } = await supabase.auth.admin.updateUserById(authId, {
+    app_metadata: { app_role: 'super-admin' },
+  })
+  if (error) throw new Error(`updateUserById app_metadata(${authId}): ${error.message}`)
+  console.log(`  SET app_metadata.app_role: super-admin`)
   return authId
 }
 

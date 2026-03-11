@@ -39,7 +39,7 @@ export function MerchantsView() {
   );
 
   const { data: approvedTenants = [], isLoading: loadingApproved } = useQuery(
-    trpc.tenants.adminGetTenants.queryOptions({ status: "active" })
+    trpc.tenants.adminGetTenants.queryOptions({ status: "approved" })
   );
 
   const invalidateTenants = () => {

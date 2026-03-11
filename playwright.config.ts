@@ -12,7 +12,7 @@ export default defineConfig({
   retries: 0,
   fullyParallel: false, // run tests sequentially to avoid port conflicts
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000',
     headless: true,
     screenshot: 'only-on-failure',
     trace: 'on-first-retry',
@@ -21,7 +21,7 @@ export default defineConfig({
     // Chromium only — Firefox does not resolve *.localhost subdomains
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
-  webServer: {
+  webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : {
     command: 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI, // reuse a running dev server locally; always start fresh in CI

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 07-01-PLAN.md — Payload packages removed, source files deleted, build passes with zero errors
-last_updated: "2026-03-11T16:18:14.880Z"
+stopped_at: Completed 07-02-PLAN.md — Vercel production deployment live at ferment-platforma.vercel.app, checkout smoke tests pass, auth blocked by cookie domain mismatch
+last_updated: "2026-03-11T18:45:30.140Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
   completed_phases: 6
   total_plans: 24
-  completed_plans: 22
+  completed_plans: 23
   percent: 100
 ---
 
@@ -80,6 +80,7 @@ Progress: [█████████░] 94%
 | Phase 06-custom-admin-ui P04 | 8 | 2 tasks | 6 files |
 | Phase 06-custom-admin-ui P05 | 6 | 1 tasks | 4 files |
 | Phase 07-payload-removal-+-cutover P01 | 22 | 3 tasks | 8 files |
+| Phase 07-payload-removal-+-cutover P02 | 525635 | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -136,6 +137,9 @@ Recent decisions affecting current work:
 - [Phase 07-payload-removal-+-cutover]: npm install used instead of bun install — bun v1.3.4 on Windows/OneDrive creates empty node_modules dirs; npm correctly populates all packages
 - [Phase 07-payload-removal-+-cutover]: force-dynamic added to (home) layout — layout calls createTRPCContext which reads cookies() making all child pages dynamic; required for Next.js 15 build to pass
 - [Phase 07-payload-removal-+-cutover]: db:seed fixed to scripts/seed.ts — src/seed.ts was deleted in Phase 4; db:types added as placeholder for supabase gen types command
+- [Phase 07-payload-removal-+-cutover]: Cookie domain mismatch on vercel.app: NEXT_PUBLIC_ROOT_DOMAIN must match deployment domain for Supabase auth cookies to work; admin smoke tests require custom domain config
+- [Phase 07-payload-removal-+-cutover]: Storefront subdomain smoke tests hardcode localhost:3000 — cannot validate on production without wildcard DNS and custom domain
+- [Phase 07-payload-removal-+-cutover]: SUPABASE_JWT_SECRET omitted from Vercel — project uses new JWT Signing Keys system, variable not referenced in codebase
 
 ### Pending Todos
 
@@ -148,6 +152,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T16:18:14.877Z
-Stopped at: Completed 07-01-PLAN.md — Payload packages removed, source files deleted, build passes with zero errors
+Last session: 2026-03-11T18:45:30.136Z
+Stopped at: Completed 07-02-PLAN.md — Vercel production deployment live at ferment-platforma.vercel.app, checkout smoke tests pass, auth blocked by cookie domain mismatch
 Resume file: None

@@ -64,7 +64,7 @@
 - [x] **CLEN-02**: Payload configuration and collection files removed (`payload.config.ts`, `src/collections/`, generated types)
 - [x] **CLEN-03**: MongoDB connection removed
 - [x] **CLEN-04**: Vercel Blob dependency removed (replaced by Supabase Storage)
-- [ ] **CLEN-05**: App builds and runs successfully with zero Payload references in codebase
+- [x] **CLEN-05**: App builds and runs successfully with zero Payload references in codebase
 
 ## v2 Requirements
 
@@ -135,7 +135,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLEN-02 | Phase 7 — Payload Removal + Cutover | Complete |
 | CLEN-03 | Phase 7 — Payload Removal + Cutover | Complete |
 | CLEN-04 | Phase 7 — Payload Removal + Cutover | Complete |
-| CLEN-05 | Phase 7 — Payload Removal + Cutover | Pending |
+| CLEN-05 | Phase 7 — Payload Removal + Cutover | Complete |
 
 **Coverage:**
 - v1 requirements: 36 total

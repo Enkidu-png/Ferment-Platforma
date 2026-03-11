@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Auth Migration** - Supabase Auth replaces Payload auth; middleware and tRPC context updated
 - [ ] **Phase 3: Data Migration** - All 8 MongoDB collections exported, ID-remapped, and imported into Supabase PostgreSQL
 - [x] **Phase 4: API Layer Migration** - All 8 tRPC routers rewritten to use Supabase client; Stripe webhook updated (completed 2026-03-06)
-- [x] **Phase 5: Storage Migration** - All Vercel Blob files moved to Supabase Storage; all URLs updated across database (completed 2026-03-10)
+- [x] **Phase 5: Storage Migration** - All Vercel Blob files moved to Supabase Storage; all URLs updated across database (completed 2026-03-10)
 - [x] **Phase 6: Custom Admin UI** - `/admin` route built with full merchant, product, category, and order management (completed 2026-03-10)
 - [ ] **Phase 7: Payload Removal + Cutover** - Payload CMS fully removed; password resets sent; production go-live
 
@@ -127,13 +127,11 @@ Plans:
   2. A search of the entire `src/` directory for `payloadcms` and `payload.config` returns zero matches
   3. All existing artists have received a password reset email and can log into the Supabase-backed platform
   4. The production application serves the marketplace correctly — storefronts load, checkout works, images display — with no Payload or MongoDB in the dependency tree
-**Plans**: 5 plans
+**Plans**: 3 plans
 Plans:
-- [ ] 06-01-PLAN.md — Test scaffold + adminProcedure + admin layout/routing
-- [ ] 06-02-PLAN.md — Merchants procedures + Tinder review UI
-- [ ] 06-03-PLAN.md — Products procedures + archive/restore UI
-- [ ] 06-04-PLAN.md — Categories + Tags procedures + CRUD UI
-- [ ] 06-05-PLAN.md — Orders procedure + router wiring + human verification
+- [ ] 07-01-PLAN.md — Delete dead Payload files + remove packages + fix scripts + local build green
+- [ ] 07-02-PLAN.md — Vercel env vars + production deployment + Playwright smoke tests
+- [ ] 07-03-PLAN.md — Password reset script + dry-run verification + live artist notification
 
 ## Progress
 
@@ -148,8 +146,8 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | 4. API Layer Migration | 5/5 | Complete   | 2026-03-06 |
 | 5. Storage Migration | 3/3 | Complete   | 2026-03-10 |
 | 6. Custom Admin UI | 5/5 | Complete   | 2026-03-10 |
-| 7. Payload Removal + Cutover | 0/TBD | Not started | - |
+| 7. Payload Removal + Cutover | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-24*
-*Last updated: 2026-03-10 — Phase 6 plans written (5 plans: foundation+test-scaffold, merchants, products, categories+tags, orders+wiring)*
+*Last updated: 2026-03-11 — Phase 7 plans written (3 plans: cleanup+build, Vercel deploy+smoke tests, password resets)*

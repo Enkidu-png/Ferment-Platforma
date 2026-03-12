@@ -127,11 +127,13 @@ Plans:
   2. A search of the entire `src/` directory for `payloadcms` and `payload.config` returns zero matches
   3. All existing artists have received a password reset email and can log into the Supabase-backed platform
   4. The production application serves the marketplace correctly — storefronts load, checkout works, images display — with no Payload or MongoDB in the dependency tree
-**Plans**: 3 plans
+**Plans**: 5 plans (3 original + 2 gap closure)
 Plans:
 - [ ] 07-01-PLAN.md — Delete dead Payload files + remove packages + fix scripts + local build green
 - [ ] 07-02-PLAN.md — Vercel env vars + production deployment + Playwright smoke tests
 - [ ] 07-03-PLAN.md — Password reset script + dry-run verification + live artist notification
+- [ ] 07-04-PLAN.md — [GAP] Fix cookie domain guard + update storefront smoke tests + admin panel human verify
+- [ ] 07-05-PLAN.md — [GAP] Re-send password reset to rate-limited artist1
 
 ## Progress
 
@@ -146,8 +148,8 @@ Phases execute in dependency order: 1 → 2 → 3 (parallel with 2) → 4 → 5 
 | 4. API Layer Migration | 5/5 | Complete   | 2026-03-06 |
 | 5. Storage Migration | 3/3 | Complete   | 2026-03-10 |
 | 6. Custom Admin UI | 5/5 | Complete   | 2026-03-10 |
-| 7. Payload Removal + Cutover | 3/3 | Complete   | 2026-03-12 |
+| 7. Payload Removal + Cutover | 3/5 | Gap closure in progress | - |
 
 ---
 *Roadmap created: 2026-02-24*
-*Last updated: 2026-03-11 — Phase 7 plans written (3 plans: cleanup+build, Vercel deploy+smoke tests, password resets)*
+*Last updated: 2026-03-12 — Phase 7 gap closure plans 07-04 and 07-05 added (cookie domain fix + artist1 re-send)*

@@ -49,6 +49,7 @@ export const SignInView = () => {
       setAuthError(error.message);
       return;
     }
+    router.refresh();
     router.push("/");
   };
 

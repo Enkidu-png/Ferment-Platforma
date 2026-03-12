@@ -2,13 +2,21 @@
 // Storefront smoke tests — verifies subdomain routing and page structure
 // Depends on seed data from Plan 01: ceramics-by-ana tenant with pottery products
 //
-// NOTE: Product listing tests are Phase 4 concerns. The tRPC procedures for
-// products/categories are still Payload-backed and will be migrated in Phase 4.
-// These tests verify what Phase 3 delivers: subdomain routing works and the
-// storefront shell renders without a hard error.
+// NOTE: These tests use hardcoded *.localhost:3000 subdomain URLs.
+// They are designed for local development where Chromium resolves *.localhost natively.
+//
+// In production mode (PLAYWRIGHT_BASE_URL set to a non-localhost URL), these tests
+// are skipped because subdomain routing on the production domain requires wildcard
+// DNS and a custom domain configured on Vercel — not yet set up.
+// When a custom domain is configured, update these tests to use the production subdomain.
 import { test, expect } from '@playwright/test'
 
+const isProductionRun =
+  !!process.env.PLAYWRIGHT_BASE_URL &&
+  !process.env.PLAYWRIGHT_BASE_URL.includes('localhost')
+
 test('ceramics-by-ana storefront loads via subdomain', async ({ page }) => {
+  test.skip(isProductionRun, 'Storefront subdomain tests require wildcard DNS — skipped in production smoke run')
   // Chromium resolves *.localhost natively — no /etc/hosts change needed
   await page.goto('http://ceramics-by-ana.localhost:3000')
   await page.waitForLoadState('domcontentloaded')
@@ -20,6 +28,7 @@ test('ceramics-by-ana storefront loads via subdomain', async ({ page }) => {
 })
 
 test('ceramics-by-ana storefront renders shop shell (Curated for you)', async ({ page }) => {
+  test.skip(isProductionRun, 'Storefront subdomain tests require wildcard DNS — skipped in production smoke run')
   await page.goto('http://ceramics-by-ana.localhost:3000')
   await page.waitForLoadState('domcontentloaded')
   // The storefront shell renders with the product area heading
@@ -28,6 +37,7 @@ test('ceramics-by-ana storefront renders shop shell (Curated for you)', async ({
 })
 
 test('ceramics-by-ana storefront does not show woodworks-jan products', async ({ page }) => {
+  test.skip(isProductionRun, 'Storefront subdomain tests require wildcard DNS — skipped in production smoke run')
   await page.goto('http://ceramics-by-ana.localhost:3000')
   await page.waitForLoadState('domcontentloaded')
   // Cross-tenant product names must not appear on this storefront
@@ -35,6 +45,7 @@ test('ceramics-by-ana storefront does not show woodworks-jan products', async ({
 })
 
 test('storefront filters sidebar renders', async ({ page }) => {
+  test.skip(isProductionRun, 'Storefront subdomain tests require wildcard DNS — skipped in production smoke run')
   await page.goto('http://ceramics-by-ana.localhost:3000')
   await page.waitForLoadState('domcontentloaded')
   // The filters sidebar should render regardless of product loading state

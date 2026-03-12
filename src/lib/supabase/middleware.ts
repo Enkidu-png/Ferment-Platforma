@@ -5,9 +5,15 @@ import type { Database } from './types'
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
 
-  const cookieOptions = process.env.NODE_ENV === 'production'
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN
+  const requestHost = request.headers.get('host') ?? ''
+  const isConfiguredDomain =
+    process.env.NODE_ENV === 'production' &&
+    !!rootDomain &&
+    requestHost.endsWith(rootDomain)
+  const cookieOptions = isConfiguredDomain
     ? {
-        domain: `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
+        domain: `.${rootDomain}`,
         path: '/',
         sameSite: 'lax' as const,
         secure: true,

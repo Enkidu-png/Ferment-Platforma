@@ -5,14 +5,12 @@ import type { Database } from './types'
 export async function createClient() {
   const cookieStore = await cookies()
 
-  const cookieOptions = process.env.NODE_ENV === 'production'
-    ? {
-        domain: `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
-        path: '/',
-        sameSite: 'lax' as const,
-        secure: true,
-      }
-    : undefined;
+  // Never set a cookie domain — let the browser default to the current host.
+  // Setting domain: ".ferment.com" on vercel.app would cause the browser to
+  // reject the cookie (domain mismatch), silently breaking the session.
+  // When the app moves to the real custom domain, subdomain cookie sharing
+  // can be added back here.
+  const cookieOptions = undefined;
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

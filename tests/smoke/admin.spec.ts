@@ -95,12 +95,12 @@ test('category can be created', async ({ page }) => {
   await expect(inputOrForm).toBeVisible()
 })
 
-// ADMN-05: Orders table renders (stub — view built in plan 05)
+// ADMN-05: Orders page renders (table when orders exist, empty state when none)
 test('orders table renders', async ({ page }) => {
   await signInAsAdmin(page)
   await page.goto('/admin/orders')
   await page.waitForLoadState('domcontentloaded')
-  // Expect a table or list element visible
-  const tableOrList = page.locator('table, [role="table"], ul').first()
-  await expect(tableOrList).toBeVisible()
+  // Accept either a table (when orders exist) or the empty-state message
+  const tableOrEmpty = page.locator('table, [role="table"], ul, :text("No orders")')
+  await expect(tableOrEmpty.first()).toBeVisible()
 })

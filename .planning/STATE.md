@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 07-03-PLAN.md — password reset emails sent to artists (2/3); 1 rate-limited, re-run pending
-last_updated: "2026-03-12T07:52:02.966Z"
+stopped_at: "Awaiting Task 3 human-verify: deploy and test admin login on ferment-platforma.vercel.app"
+last_updated: "2026-03-12T08:55:34.553Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
-  completed_phases: 7
-  total_plans: 24
-  completed_plans: 24
+  completed_phases: 6
+  total_plans: 26
+  completed_plans: 25
   percent: 100
 ---
 
@@ -82,6 +82,7 @@ Progress: [█████████░] 94%
 | Phase 07-payload-removal-+-cutover P01 | 22 | 3 tasks | 8 files |
 | Phase 07-payload-removal-+-cutover P02 | 525635 | 3 tasks | 2 files |
 | Phase 07-payload-removal-+-cutover P03 | 20 | 3 tasks | 1 files |
+| Phase 07-payload-removal-+-cutover P04 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -142,6 +143,8 @@ Recent decisions affecting current work:
 - [Phase 07-payload-removal-+-cutover]: Storefront subdomain smoke tests hardcode localhost:3000 — cannot validate on production without wildcard DNS and custom domain
 - [Phase 07-payload-removal-+-cutover]: SUPABASE_JWT_SECRET omitted from Vercel — project uses new JWT Signing Keys system, variable not referenced in codebase
 - [Phase 07-payload-removal-+-cutover]: Supabase Free tier rate limit (4 emails/hour) caused 1 of 3 artist emails to fail in live run; documented as expected behaviour with re-run procedure
+- [Phase 07]: Cookie domain guard uses endsWith(rootDomain) not vercel.app hardcode — works for any domain mismatch
+- [Phase 07]: Storefront smoke tests skip (not fail) in production — skipped tests exit 0, correct state until wildcard DNS configured
 
 ### Pending Todos
 
@@ -154,6 +157,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-12T07:52:02.964Z
-Stopped at: Completed 07-03-PLAN.md — password reset emails sent to artists (2/3); 1 rate-limited, re-run pending
+Last session: 2026-03-12T08:55:34.551Z
+Stopped at: Awaiting Task 3 human-verify: deploy and test admin login on ferment-platforma.vercel.app
 Resume file: None

@@ -49,7 +49,19 @@ export const ProductCard = ({
         </div>
         <div className="p-4 border-y flex flex-col gap-3 flex-1">
           <h2 className="text-lg font-medium line-clamp-4">{name}</h2>
-          <div className="flex items-center gap-2" onClick={handleUserClick}>
+          <div
+            className="flex items-center gap-2"
+            onClick={handleUserClick}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(generateTenantURL(tenantSlug));
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
             {tenantImageUrl && (
               <Image
                 alt={tenantSlug}

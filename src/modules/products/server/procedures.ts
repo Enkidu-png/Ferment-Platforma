@@ -31,6 +31,60 @@ type ProductRowWithReviews = ProductRow & {
   reviewRating: number;
 };
 
+type PaginatedEmpty = {
+  docs: ProductRowWithReviews[];
+  totalDocs: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+};
+
+function emptyPage(input: { cursor: number; limit: number }): PaginatedEmpty {
+  return {
+    docs: [] as ProductRowWithReviews[],
+    totalDocs: 0,
+    page: input.cursor,
+    limit: input.limit,
+    totalPages: 0,
+    hasNextPage: false,
+    hasPrevPage: false,
+  };
+}
+
+async function findTenantId(
+  tenantSlug: string,
+  supabase: typeof supabaseAdmin,
+): Promise<string | null> {
+  const { data } = await supabase
+    .from("tenants")
+    .select("id")
+    .eq("slug", tenantSlug)
+    .single();
+  return data?.id ?? null;
+}
+
+async function findProductIdsByTags(
+  tags: string[],
+  supabase: typeof supabaseAdmin,
+): Promise<string[] | null> {
+  const { data: tagRows } = await supabase
+    .from("tags")
+    .select("id")
+    .in("name", tags);
+
+  if (!tagRows || tagRows.length === 0) return null;
+
+  const { data: ptRows } = await supabase
+    .from("product_tags")
+    .select("product_id")
+    .in("tag_id", tagRows.map((t) => t.id));
+
+  const productIds = (ptRows ?? []).map((pt) => pt.product_id);
+  return productIds.length === 0 ? null : productIds;
+}
+
 export const productsRouter = createTRPCRouter({
   getOne: baseProcedure
     .input(z.object({ id: z.string() }))
@@ -137,26 +191,9 @@ export const productsRouter = createTRPCRouter({
 
       // Tenant slug filter (two-step)
       if (input.tenantSlug) {
-        const { data: tenantRow } = await ctx.supabase
-          .from("tenants")
-          .select("id")
-          .eq("slug", input.tenantSlug)
-          .single();
-
-        if (!tenantRow) {
-          // Tenant not found — return empty result
-          return {
-            docs: [] as ProductRowWithReviews[],
-            totalDocs: 0,
-            page: input.cursor,
-            limit: input.limit,
-            totalPages: 0,
-            hasNextPage: false,
-            hasPrevPage: false,
-          };
-        }
-
-        query = query.eq("tenant_id", tenantRow.id);
+        const tenantId = await findTenantId(input.tenantSlug, ctx.supabase as typeof supabaseAdmin);
+        if (!tenantId) return emptyPage(input);
+        query = query.eq("tenant_id", tenantId);
       } else {
         // Global marketplace — hide private products
         query = query.eq("is_private", false);
@@ -189,43 +226,8 @@ export const productsRouter = createTRPCRouter({
 
       // Tag filter (three-step: tag names → tag IDs → product IDs)
       if (input.tags && input.tags.length > 0) {
-        const { data: tagRows } = await ctx.supabase
-          .from("tags")
-          .select("id")
-          .in("name", input.tags);
-
-        if (!tagRows || tagRows.length === 0) {
-          // No matching tags — return empty
-          return {
-            docs: [] as ProductRowWithReviews[],
-            totalDocs: 0,
-            page: input.cursor,
-            limit: input.limit,
-            totalPages: 0,
-            hasNextPage: false,
-            hasPrevPage: false,
-          };
-        }
-
-        const { data: ptRows } = await ctx.supabase
-          .from("product_tags")
-          .select("product_id")
-          .in("tag_id", tagRows.map((t) => t.id));
-
-        const productIds = (ptRows ?? []).map((pt) => pt.product_id);
-
-        if (productIds.length === 0) {
-          return {
-            docs: [] as ProductRowWithReviews[],
-            totalDocs: 0,
-            page: input.cursor,
-            limit: input.limit,
-            totalPages: 0,
-            hasNextPage: false,
-            hasPrevPage: false,
-          };
-        }
-
+        const productIds = await findProductIdsByTags(input.tags, ctx.supabase as typeof supabaseAdmin);
+        if (!productIds) return emptyPage(input);
         query = query.in("id", productIds);
       }
 

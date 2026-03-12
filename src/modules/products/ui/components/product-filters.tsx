@@ -27,7 +27,10 @@ const ProductFilter = ({ title, className, children }:ProductFilterProps) => {
     )}>
       <div
         onClick={() => setIsOpen((current) => !current)}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setIsOpen((current) => !current)}
         className="flex items-center justify-between cursor-pointer"
+        role="button"
+        tabIndex={0}
       >
         <p className="font-medium">{title}</p>
         <Icon className="size-5" />

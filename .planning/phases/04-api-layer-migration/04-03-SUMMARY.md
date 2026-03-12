@@ -136,6 +136,15 @@ None - no external service configuration required.
 - Ready for plan 04-04 (checkout/webhook procedures) and 04-05 (Payload removal)
 - @/payload-types no longer imported in these two routers — one step closer to full Payload removal
 
+## Self-Check: PASSED
+
+- src/modules/reviews/server/procedures.ts: FOUND
+- src/modules/library/server/procedures.ts: FOUND
+- .planning/phases/04-api-layer-migration/04-03-SUMMARY.md: FOUND
+- Commit bb40ca4 (reviewsRouter): FOUND
+- Commit 249d641 (libraryRouter): FOUND
+- TypeScript errors in reviews/library modules: 0
+
 ---
 *Phase: 04-api-layer-migration*
 *Completed: 2026-03-06*

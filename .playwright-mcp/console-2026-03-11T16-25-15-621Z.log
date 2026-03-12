@@ -1,0 +1,7 @@
+[     427ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://sonar.assecods.pl/api/navigation/global:0
+[     427ms] [ERROR] Response @ https://sonar.assecods.pl/js/echoes-BY0iOvo_.js:80
+[     447ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://sonar.assecods.pl/api/users/current:0
+[     447ms] [ERROR] Application failed to start Response @ https://sonar.assecods.pl/js/echoes-BY0iOvo_.js:80
+[     447ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://sonar.assecods.pl/api/features/list:0
+[     450ms] Response
+[  931876ms] [ERROR] Failed to load resource: the server responded with a status of 401 () @ https://sonar.assecods.pl/api/authentication/login:0

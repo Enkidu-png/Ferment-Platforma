@@ -13,17 +13,13 @@ Please review and edit these subcategory lists. Once you approve them, I'll impl
 Color: `#FF6B9D` (Pink)
 
 **Proposed Subcategories:**
-- T-Shirts
-- Hoodies & Sweatshirts
-- Prints & Graphics
-- Dresses & Skirts
-- Pants & Shorts
-
-**Alternative suggestions:**
-- Jackets & Outerwear
-- Tank Tops & Crop Tops
-- Socks & Underwear
-- Activewear
+- tees
+- longsleeves
+- hoodies
+- hats
+- dresses and skirts
+- pants and shorts
+- underwear
 
 ---
 
@@ -31,17 +27,11 @@ Color: `#FF6B9D` (Pink)
 Color: `#FFD700` (Gold)
 
 **Proposed Subcategories:**
-- Rings
-- Necklaces & Pendants
-- Earrings
-- Bracelets & Anklets
-- Body Jewelry
-
-**Alternative suggestions:**
-- Brooches & Pins
-- Watches
-- Chains
-- Sets & Collections
+- rings
+- necklaces and pendants
+- earrings
+- bracelets and anklets
+- other
 
 ---
 
@@ -49,18 +39,10 @@ Color: `#FFD700` (Gold)
 Color: `#7EC8E3` (Light Blue)
 
 **Proposed Subcategories:**
-- Art Prints
-- Photography Prints
-- Vintage & Retro
-- Music & Band Posters
-- Movie & TV Posters
-
-**Alternative suggestions:**
-- Abstract & Geometric
-- Nature & Landscape
-- Typography & Quotes
-- Illustration & Design
-- Custom Prints
+- art prints
+- event prints
+- culture
+- other
 
 ---
 
@@ -68,17 +50,13 @@ Color: `#7EC8E3` (Light Blue)
 Color: `#D4A574` (Clay/Terracotta)
 
 **Proposed Subcategories:**
-- Bowls & Dishes
-- Mugs & Cups
-- Vases & Planters
-- Plates & Platters
-- Decorative Pieces
+- bowls and dishes
+- mugs and cups
+- vases and planters
+- decorative pieces
+- others
 
-**Alternative suggestions:**
-- Teapots & Tea Sets
-- Sculptures
-- Tiles & Mosaics
-- Functional Kitchenware
+
 
 ---
 
@@ -86,18 +64,14 @@ Color: `#D4A574` (Clay/Terracotta)
 Color: `#96E6B3` (Mint Green)
 
 **Proposed Subcategories:**
-- Bags & Totes
-- Hats & Headwear
-- Pins & Patches
-- Belts & Straps
-- Scarves & Bandanas
+- bags and totes
+- gadgets
+- belts
+- scarves and bandanas
+- sunglasses
+- brelock
+- other
 
-**Alternative suggestions:**
-- Sunglasses
-- Wallets & Cardholders
-- Keychains
-- Phone Cases
-- Hair Accessories
 
 ---
 
@@ -105,18 +79,7 @@ Color: `#96E6B3` (Mint Green)
 Color: `#1A1A1A` (Black)
 
 **Proposed Subcategories:**
-- Flash Art
-- Custom Designs
-- Temporary Tattoos
-- Tattoo Templates
-- Stencils
-
-**Alternative suggestions:**
-- Traditional
-- Fine Line
-- Blackwork
-- Color Work
-- Minimalist
+Tattoos will behave different than anyother category so for now we dont need subcategories
 
 ---
 
@@ -124,18 +87,10 @@ Color: `#1A1A1A` (Black)
 Color: `#B5B9FF` (Lavender)
 
 **Proposed Subcategories:**
-- Albums & EPs
-- Singles & Tracks
-- Vinyl Records
-- Digital Downloads
-- Music Merch
-
-**Alternative suggestions:**
-- Cassettes
-- CDs
-- Music Lessons
-- Beats & Instrumentals
-- Sample Packs
+- cd's
+- tape's
+- vinyl records
+- music merch
 
 ---
 

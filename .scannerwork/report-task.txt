@@ -1,0 +1,6 @@
+projectKey=JSszkolenieAI
+serverUrl=https://sonar.assecods.pl
+serverVersion=25.2.0.102705
+dashboardUrl=https://sonar.assecods.pl/dashboard?id=JSszkolenieAI
+ceTaskId=44cb32e4-7722-4074-b6e7-825efe824dfd
+ceTaskUrl=https://sonar.assecods.pl/api/ce/task?id=44cb32e4-7722-4074-b6e7-825efe824dfd

@@ -50,6 +50,9 @@ export const TagsFilter = ({ value, onChange }: TagsFilterProps) => {
               key={tag.id}
               className="flex items-center justify-between cursor-pointer"
               onClick={() => onClick(tag.name)}
+              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onClick(tag.name)}
+              role="button"
+              tabIndex={0}
             >
               <p className="font-medium">{tag.name}</p>
               <Checkbox

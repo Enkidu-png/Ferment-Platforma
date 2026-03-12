@@ -17,13 +17,13 @@ const Page = async ({ params }: Props) => {
   const { productId } = await params;
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.library.getOne.queryOptions({
+  queryClient.prefetchQuery(trpc.library.getOne.queryOptions({
     productId,
-  }));
+  })).catch(() => {});
 
-  void queryClient.prefetchQuery(trpc.reviews.getOne.queryOptions({
+  queryClient.prefetchQuery(trpc.reviews.getOne.queryOptions({
     productId,
-  }));
+  })).catch(() => {});
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

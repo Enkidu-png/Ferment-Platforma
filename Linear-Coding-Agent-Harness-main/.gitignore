@@ -1,9 +1,0 @@
-# Agent-generated output directories
-generations/
-
-# Log files
-logs/
-
-.env
-venv
-__pycache__

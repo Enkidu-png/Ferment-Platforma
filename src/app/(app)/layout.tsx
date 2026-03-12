@@ -3,6 +3,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import { TRPCReactProvider } from "@/trpc/client";
 import { Toaster } from "@/components/ui/sonner";
+import { PostHogProvider } from "@/components/posthog-provider";
 
 import "./globals.css";
 
@@ -22,12 +23,14 @@ export default function RootLayout({
         className="antialiased"
         style={{ fontFamily: "'VCR OSD Mono', monospace" }}
       >
-        <NuqsAdapter>
-          <TRPCReactProvider>
-            {children}
-            <Toaster />
-          </TRPCReactProvider>
-        </NuqsAdapter>
+        <PostHogProvider>
+          <NuqsAdapter>
+            <TRPCReactProvider>
+              {children}
+              <Toaster />
+            </TRPCReactProvider>
+          </NuqsAdapter>
+        </PostHogProvider>
       </body>
     </html>
   );

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: in_progress
-stopped_at: Completed 07-02-PLAN.md — Vercel production deployment live at ferment-platforma.vercel.app, checkout smoke tests pass, auth blocked by cookie domain mismatch
-last_updated: "2026-03-11T18:45:30.140Z"
+stopped_at: Completed 07-03-PLAN.md — password reset emails sent to artists (2/3); 1 rate-limited, re-run pending
+last_updated: "2026-03-12T07:52:02.966Z"
 last_activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 24
-  completed_plans: 23
+  completed_plans: 24
   percent: 100
 ---
 
@@ -81,6 +81,7 @@ Progress: [█████████░] 94%
 | Phase 06-custom-admin-ui P05 | 6 | 1 tasks | 4 files |
 | Phase 07-payload-removal-+-cutover P01 | 22 | 3 tasks | 8 files |
 | Phase 07-payload-removal-+-cutover P02 | 525635 | 3 tasks | 2 files |
+| Phase 07-payload-removal-+-cutover P03 | 20 | 3 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,7 @@ Recent decisions affecting current work:
 - [Phase 07-payload-removal-+-cutover]: Cookie domain mismatch on vercel.app: NEXT_PUBLIC_ROOT_DOMAIN must match deployment domain for Supabase auth cookies to work; admin smoke tests require custom domain config
 - [Phase 07-payload-removal-+-cutover]: Storefront subdomain smoke tests hardcode localhost:3000 — cannot validate on production without wildcard DNS and custom domain
 - [Phase 07-payload-removal-+-cutover]: SUPABASE_JWT_SECRET omitted from Vercel — project uses new JWT Signing Keys system, variable not referenced in codebase
+- [Phase 07-payload-removal-+-cutover]: Supabase Free tier rate limit (4 emails/hour) caused 1 of 3 artist emails to fail in live run; documented as expected behaviour with re-run procedure
 
 ### Pending Todos
 
@@ -152,6 +154,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-11T18:45:30.136Z
-Stopped at: Completed 07-02-PLAN.md — Vercel production deployment live at ferment-platforma.vercel.app, checkout smoke tests pass, auth blocked by cookie domain mismatch
+Last session: 2026-03-12T07:52:02.964Z
+Stopped at: Completed 07-03-PLAN.md — password reset emails sent to artists (2/3); 1 rate-limited, re-run pending
 Resume file: None

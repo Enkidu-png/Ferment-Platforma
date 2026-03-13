@@ -1,11 +1,11 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: complete
-stopped_at: "Phase 07 complete — all plans done, production verified, milestone ready for audit"
-last_updated: "2026-03-12T00:00:00.000Z"
-last_activity: 2026-03-12 — Phase 07 complete (auth fix, smoke suite green, summaries written)
+milestone_name: MVP
+status: shipped
+stopped_at: "v1.0 milestone archived — production live, retrospective written"
+last_updated: "2026-03-13T00:00:00.000Z"
+last_activity: 2026-03-13 — v1.0 milestone complete (archived, PROJECT.md evolved, git tagged)
 progress:
   total_phases: 7
   completed_phases: 7
@@ -14,149 +14,50 @@ progress:
   percent: 100
 ---
 
----
-gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: in_progress
-stopped_at: "Completed 05-01-PLAN.md — storage bucket created, RLS migration file written, verify-blob-urls.ts exits 0, smoke tests pass"
-last_updated: "2026-03-10T15:00:00Z"
-last_activity: "2026-03-10 — Plan 05-01 executed (storage bucket + RLS migration + verification tooling)"
-progress:
-  [██████████] 100%
-  completed_phases: 4
-  total_plans: 16
-  completed_plans: 16
-  percent: 94
----
-
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-02-24)
+See: .planning/PROJECT.md (updated 2026-03-13 after v1.0 milestone)
 
 **Core value:** The marketplace works exactly as before — artists manage their shops, buyers browse and buy — but the backend is Supabase, making the codebase maintainable with AI assistance.
-**Current focus:** Phase 5 — Storage Migration
+**Current focus:** Planning next milestone (v2.0)
 
-## Current Position
+## v1.0 Shipped
 
-Phase: 5 of 7 (Storage Migration) — IN PROGRESS
-Plan: 1 of 3 — complete (05-01 storage infrastructure + verification tooling)
-Status: Plan 05-01 complete — media bucket created, RLS migration written, verify-blob-urls.ts exits 0
-Last activity: 2026-03-10 — Plan 05-01 executed (media bucket, RLS policies, smoke tests)
+Milestone v1.0 MVP is complete and archived.
 
-Progress: [█████████░] 94%
+- Production: https://ferment-platforma.vercel.app
+- Archive: .planning/milestones/v1.0-ROADMAP.md
+- Requirements archive: .planning/milestones/v1.0-REQUIREMENTS.md
+- Retrospective: .planning/RETROSPECTIVE.md
 
-## Performance Metrics
+## Next Step
 
-**Velocity:**
-- Total plans completed: 6
-- Average duration: ~7 min
-- Total execution time: ~0.67 hours
+Run `/gsd:new-milestone` to start v2.0 planning.
 
-**By Phase:**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 02 Auth Migration | 3 | ~14 min | ~5 min |
-| 03 Seed + Verify | 2 | ~21 min | ~10 min |
-| 04 API Migration | 1/5 done | 8 min | 8 min |
-
-**Recent Trend:**
-- Last 6 plans: 02-01 (2.5 min), 02-02 (3 min), 02-03 (8 min), 03-01 (5 min), 03-02 (16 min), 04-01 (8 min)
-- Trend: Consistent
-
-*Updated after each plan completion*
-| Phase 04-api-layer-migration P02 | 14 | 2 tasks | 3 files |
-| Phase 04 P04 | 5 | 2 tasks | 2 files |
-| Phase 04-api-layer-migration P05 | 5 | 3 tasks | 20 files |
-| Phase 05-storage-migration P02 | 2 | 2 tasks | 3 files |
-| Phase 05-storage-migration P03 | 8 | 1 tasks | 3 files |
-| Phase 05-storage-migration P03 | 10 | 2 tasks | 1 files |
-| Phase 06-custom-admin-ui P01 | 3 | 2 tasks | 5 files |
-| Phase 06-custom-admin-ui P02 | 4 | 2 tasks | 4 files |
-| Phase 06-custom-admin-ui P03 | 8 | 2 tasks | 3 files |
-| Phase 06-custom-admin-ui P04 | 8 | 2 tasks | 6 files |
-| Phase 06-custom-admin-ui P05 | 6 | 1 tasks | 4 files |
-| Phase 07-payload-removal-+-cutover P01 | 22 | 3 tasks | 8 files |
-| Phase 07-payload-removal-+-cutover P02 | 525635 | 3 tasks | 2 files |
-| Phase 07-payload-removal-+-cutover P03 | 20 | 3 tasks | 1 files |
-| Phase 07-payload-removal-+-cutover P04 | 2 | 2 tasks | 2 files |
+Top candidates for v2.0 (from PROJECT.md Active requirements):
+- Admin product image upload (mediaRouter.createRow backend ready — needs UI)
+- Wildcard DNS + custom domain (enables production subdomain smoke tests)
+- Product-level approval workflow
+- Artist analytics dashboard
 
 ## Accumulated Context
 
-### Decisions
-
 Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- Setup: Keep tRPC — procedures just point to Supabase; no layer replacement, only ctx rewrite
-- Setup: No ORM — Supabase query builder sufficient; avoids disproportionate complexity for non-programmer owner
-- Setup: Build custom admin UI — Supabase dashboard is developer tooling, not content management
-- Setup: Payload removed in Phase 4 (not Phase 7) — user confirmed full Supabase migration; no real data to preserve; dev env only
-- 04: Product CRUD mutations (create/update/delete) don't exist in current codebase — deferred to Phase 6 (custom admin UI)
-- 02-01: Use getUser() not getSession() — getSession() does not validate JWT server-side
-- 02-01: baseProcedure has no middleware — Supabase client injected via createTRPCContext, no wrapper needed
-- 02-02: Use x-middleware-rewrite header mutation (not NextResponse.rewrite) to preserve Supabase session cookies
-- 02-02: cookieOptions undefined in development — setting .ferment.com domain on localhost causes browsers to reject cookies
-- 02-03: tenants.stripe_account_id is NOT NULL with no default — insert empty string placeholder until Stripe onboarding (Phase 4)
-- 02-03: tenants has no user_id column — user linked via user_tenants join table after tenant creation in confirm route
-- 03-01: stripe_account_id uses 'placeholder_{slug}' per tenant (not empty string — empty string conflicts on re-runs)
-- 03-02: Playwright uses locator('input').first() not getByLabel — shadcn FormLabel unreliable with Playwright's label association detection
-- 03-02: custom_access_token_hook had null-safety bug — fixed with coalesce(event->'claims', '{}'::jsonb); migration applied
-- [Phase 04]: Cast PostgREST self-join result via unknown — Supabase infers join as T|null not T[], requiring explicit unknown cast
-- [Phase 04]: tagsRouter return shape uses hasNextPage/page — Payload nextPage field removed; consumer tags-filter.tsx updated
-- [Phase 04]: reviews ownership check uses existingReview.user_id !== ctx.user.id (Supabase field name, not user)
-- [Phase 04]: library.getMany uses two-step orders→products query pattern (PostgREST has no populate; two fetches required)
-- [Phase 04]: RichText (Payload Lexical) replaced with plain div for product content — Supabase stores content as string not SerializedEditorState
-- [Phase 04]: Cast complex PostgREST join results via unknown as ProductRow — Supabase TypeScript client returns GenericStringError for aliased join strings
-- [Phase 04]: getNextPageParam uses hasNextPage/page+1 — Payload nextPage field replaced with explicit boolean in new Supabase response shape
-- [Phase 04]: checkout.verify: use user_tenants join table (not Payload users) — new Supabase users have no Payload record
-- [Phase 04]: Stripe webhook: use supabaseAdmin (service-role) not ctx.supabase — webhook has no auth context; anon client would be blocked by RLS
-- [Phase 04]: orders.insert: no 'name' field — Supabase orders table has no name column
-- [Phase 04]: src/seed.ts (legacy Payload seed) deleted — active seed is scripts/seed.ts (Supabase-based from Phase 3)
-- [Phase 04]: Payload npm packages stay in package.json until Phase 7 — only application files deleted in Phase 4
-- [Phase 05-storage-migration]: Use exact Supabase hostname from NEXT_PUBLIC_SUPABASE_URL in remotePatterns (not wildcard *.supabase.co)
-- [Phase 05-storage-migration]: mediaRouter createRow uses ctx.supabase (anon/RLS-enforced), returns only { id } for Phase 6 product linking
-- [Phase 05-storage-migration]: Use product.image_id null check as idempotency guard in seed — avoids querying storage for existing files
-- [Phase 05-storage-migration]: picsum.photos deterministic seed IDs (10,20,30...) for consistent placeholder images across env resets
-- [05-01]: media bucket created via Storage REST API (supabase CLI not linked — no management API token); RLS policies in migration file require manual SQL execution via dashboard
-- [05-01]: verify-blob-urls.ts confirms STOR-02/STOR-03 satisfied as no-op (no Vercel Blob URLs existed in DB)
-- [05-01]: storage.spec.ts stub tests pass pre-seed — broken image assertion validates current state correctly
-- [Phase 05-storage-migration]: Human verification confirmed: ceramics-by-ana product cards load real images from Supabase Storage URLs (no blob.vercel-storage.com requests)
-- [Phase 06-custom-admin-ui]: adminProcedure reads app_role from JWT claims (app_metadata) — no DB query needed, hook embedded role in Phase 3
-- [Phase 06-custom-admin-ui]: C:/Program Files/Git/admin page redirects to /admin/merchants as default landing (locked decision)
-- [Phase 06-custom-admin-ui]: Cast PostgREST complex join result via unknown as RawTenantRow — Supabase TS client returns GenericStringError for aliased multi-level joins
-- [Phase 06-custom-admin-ui]: ADMN-03 email notification to rejected merchant deferred to Phase 7 — no transactional email service configured; status change IS implemented
-- [Phase 06-custom-admin-ui]: adminGetTenants: listUsers(perPage:1000) builds email Map once per request — acceptable for small merchant sets, Phase 7 note to switch to per-tenant getUserById if scale grows
-- [Phase 06-custom-admin-ui]: adminGetProducts uses supabaseAdmin not ctx.supabase — admin must see ALL products across ALL tenants including archived; RLS would restrict to admin's own tenant
-- [Phase 06-custom-admin-ui]: tenantName filter applied post-fetch — Supabase JS does not support .ilike() on embedded foreign-table columns in a single query chain; safe at admin scale
-- [Phase 06-custom-admin-ui]: adminDeleteCategory checks product count before delete — returns descriptive error if products use the category (FK guard)
-- [Phase 06-custom-admin-ui]: CategoriesView shows only top-level categories (parent_id = null) — subcategory management deferred to v2
-- [Phase 06-custom-admin-ui]: ordersRouter uses supabaseAdmin (service-role) for cross-tenant access — orders RLS is user-scoped, admin needs all orders
-- [Phase 06-custom-admin-ui]: Buyer identified by username from public.users — no N+1 email lookups; satisfies ADMN-06 buyer information requirement
-- [Phase 07-payload-removal-+-cutover]: npm install used instead of bun install — bun v1.3.4 on Windows/OneDrive creates empty node_modules dirs; npm correctly populates all packages
-- [Phase 07-payload-removal-+-cutover]: force-dynamic added to (home) layout — layout calls createTRPCContext which reads cookies() making all child pages dynamic; required for Next.js 15 build to pass
-- [Phase 07-payload-removal-+-cutover]: db:seed fixed to scripts/seed.ts — src/seed.ts was deleted in Phase 4; db:types added as placeholder for supabase gen types command
-- [Phase 07-payload-removal-+-cutover]: Cookie domain mismatch on vercel.app: NEXT_PUBLIC_ROOT_DOMAIN must match deployment domain for Supabase auth cookies to work; admin smoke tests require custom domain config
-- [Phase 07-payload-removal-+-cutover]: Storefront subdomain smoke tests hardcode localhost:3000 — cannot validate on production without wildcard DNS and custom domain
-- [Phase 07-payload-removal-+-cutover]: SUPABASE_JWT_SECRET omitted from Vercel — project uses new JWT Signing Keys system, variable not referenced in codebase
-- [Phase 07-payload-removal-+-cutover]: Supabase Free tier rate limit (4 emails/hour) caused 1 of 3 artist emails to fail in live run; documented as expected behaviour with re-run procedure
-- [Phase 07]: Cookie domain guard uses endsWith(rootDomain) not vercel.app hardcode — works for any domain mismatch
-- [Phase 07]: Storefront smoke tests skip (not fail) in production — skipped tests exit 0, correct state until wildcard DNS configured
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-- Phase 2: `@supabase/ssr` cookie handling behavior with Next.js 15 async `cookies()` API needs runtime verification
-- Phase 5: Confirm whether Supabase Storage image transforms (Imgproxy) require Pro plan or are available on Free tier
+- Supabase Storage image transforms (Imgproxy) — Free tier availability unconfirmed
+- Subdomain routing uses x-middleware-rewrite header (non-canonical) — migrate to NextResponse.rewrite() when custom domain configured
+- Supabase CLI not linked — RLS migrations applied manually; link before v2 migration work
 
 ## Session Continuity
 
-Last session: 2026-03-12T08:55:34.551Z
-Stopped at: Awaiting Task 3 human-verify: deploy and test admin login on ferment-platforma.vercel.app
+Last session: 2026-03-13
+Stopped at: v1.0 milestone archive complete
 Resume file: None
